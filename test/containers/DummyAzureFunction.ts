@@ -97,5 +97,3 @@ export class DummyAzureFunction extends AzureFunction {
             , this.deleteById);
     }
 }
-
-export const handler = new DummyAzureFunction().getHandler();

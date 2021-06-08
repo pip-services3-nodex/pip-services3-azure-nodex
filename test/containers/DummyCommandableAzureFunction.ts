@@ -10,5 +10,3 @@ export class DummyCommandableAzureFunction extends CommandableAzureFunction {
         this._factories.add(new DummyFactory());
     }
 }
-
-export const handler = new DummyCommandableAzureFunction().getHandler();
