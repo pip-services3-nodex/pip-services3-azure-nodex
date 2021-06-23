@@ -275,7 +275,7 @@ export abstract class AzureFunction extends Container {
      * @params result the response from the business logic
      * @returns result modified by overriders.
      */
-    protected prepareResult(result: any): any {
+    protected prepareResult(context: any, result: any): any {
         return result;
     }
 
@@ -309,7 +309,7 @@ export abstract class AzureFunction extends Container {
             .withDetails('command', cmd);
         }
         
-        return this.prepareResult(await action(event));
+        return this.prepareResult(event, await action(event));
     }
     
     private async handler(event: any): Promise<any> {

@@ -126,8 +126,20 @@ export declare abstract class AzureFunction extends Container {
      * @param action        an action function that is called when action is invoked.
      */
     protected registerAction(cmd: string, schema: Schema, action: (params: any) => Promise<any>): void;
+    /**
+     * Allow overriders to modify context object.
+     *
+     * @params context the event parameters (or function arguments)
+     * @returns context modified by overriders.
+     */
     protected prepareContext(context: any): any;
-    protected prepareResult(result: any): any;
+    /**
+     * Allow overriders to modify result object.
+     *
+     * @params result the response from the business logic
+     * @returns result modified by overriders.
+     */
+    protected prepareResult(context: any, result: any): any;
     /**
      * Executes this Azure Function and returns the result.
      * This method can be overloaded in child classes

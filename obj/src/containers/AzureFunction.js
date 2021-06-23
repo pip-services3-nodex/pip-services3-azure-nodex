@@ -238,10 +238,22 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
         };
         this._actions[cmd] = actionCurl;
     }
+    /**
+     * Allow overriders to modify context object.
+     *
+     * @params context the event parameters (or function arguments)
+     * @returns context modified by overriders.
+     */
     prepareContext(context) {
         return context;
     }
-    prepareResult(result) {
+    /**
+     * Allow overriders to modify result object.
+     *
+     * @params result the response from the business logic
+     * @returns result modified by overriders.
+     */
+    prepareResult(context, result) {
         return result;
     }
     /**
@@ -265,7 +277,7 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
                 throw new pip_services3_commons_nodex_1.BadRequestException(correlationId, 'NO_ACTION', 'Action ' + cmd + ' was not found')
                     .withDetails('command', cmd);
             }
-            return this.prepareResult(yield action(event));
+            return this.prepareResult(event, yield action(event));
         });
     }
     handler(event) {
