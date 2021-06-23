@@ -1,10 +1,11 @@
 /** @module containers */
 /** @hidden */ 
-let process = require('process');
+const process = require('process');
 
 import { BadRequestException } from 'pip-services3-commons-nodex';
 import { ConfigParams } from 'pip-services3-commons-nodex';
 import { DependencyResolver } from 'pip-services3-commons-nodex';
+import { Descriptor } from 'pip-services3-commons-nodex';
 import { IReferences } from 'pip-services3-commons-nodex';
 import { Schema } from 'pip-services3-commons-nodex';
 import { UnknownException } from 'pip-services3-commons-nodex';
@@ -14,8 +15,10 @@ import { ConsoleLogger } from 'pip-services3-components-nodex';
 import { CompositeTracer } from 'pip-services3-components-nodex';
 import { InstrumentTiming } from 'pip-services3-rpc-nodex';
 
+import { IAzureFunctionService } from '../services/IAzureFunctionService';
+
 /**
- * Abstract Azure Function function, that acts as a container to instantiate and run components
+ * Abstract Azure Function, that acts as a container to instantiate and run components
  * and expose them via external entry point. 
  * 
  * When handling calls "cmd" parameter determines which what action shall be called, while
@@ -24,59 +27,26 @@ import { InstrumentTiming } from 'pip-services3-rpc-nodex';
  * Container configuration for this Azure Function is stored in <code>"./config/config.yml"</code> file.
  * But this path can be overriden by <code>CONFIG_PATH</code> environment variable.
  * 
- * ### Configuration parameters ###
- * 
- * - dependencies:
- *     - controller:                  override for Controller dependency
- * - connections:                   
- *     - discovery_key:               (optional) a key to retrieve the connection from [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]]
- *     - region:                      (optional) AWS region
- * - credentials:    
- *     - store_key:                   (optional) a key to retrieve the credentials from [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/auth.icredentialstore.html ICredentialStore]]
- *     - access_id:                   AWS access/client id
- *     - access_key:                  AWS access/client id
- * 
  * ### References ###
  * 
  * - <code>\*:logger:\*:\*:1.0</code>            (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
  * - <code>\*:counters:\*:\*:1.0</code>          (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- * - <code>\*:discovery:\*:\*:1.0</code>         (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]] services to resolve connection
- * - <code>\*:credential-store:\*:\*:1.0</code>  (optional) Credential stores to resolve credentials
+ * - <code>\*:service:azure-function:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-aws-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:commandable-azure-function:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-aws-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
  * 
- * @see [[LambdaClient]]
- * 
+ *
  * ### Example ###
  * 
- *     class MyLambdaFunction extends LambdaFunction {
- *         private _controller: IMyController;
- *         ...
+ *     class MyAzureFunctionFunction extends AzureFunction {
  *         public constructor() {
- *             base("mygroup", "MyGroup lambda function");
- *             this._dependencyResolver.put(
- *                 "controller",
- *                 new Descriptor("mygroup","controller","*","*","1.0")
- *             );
- *         }
- *      
- *         public setReferences(references: IReferences): void {
- *             base.setReferences(references);
- *             this._controller = this._dependencyResolver.getRequired<IMyController>("controller");
- *         }
- *      
- *         public register(): void {
- *             registerAction("get_mydata", null, params => Promise<any> {
- *                 let correlationId = params.correlation_id;
- *                 let id = params.id;
- *                 return this._controller.getMyData(correlationId, id);
- *             });
- *             ...
+ *             base("mygroup", "MyGroup Azure Function");
  *         }
  *     }
  * 
- *     let lambda = new MyLambdaFunction();
+ *     let azureFunction = new MyAzureFunctionFunction();
  *     
  *     await service.run();
- *     console.log("MyLambdaFunction is started");
+ *     console.log("MyAzureFunctionFunction is started");
  */
 export abstract class AzureFunction extends Container {
     /**
@@ -105,7 +75,7 @@ export abstract class AzureFunction extends Container {
     protected _configPath: string = './config/config.yml';
 
     /**
-     * Creates a new instance of this lambda function.
+     * Creates a new instance of this Azure Function function.
      * 
      * @param name          (optional) a container name (accessible via ContextInfo)
      * @param description   (optional) a container description (accessible via ContextInfo)
@@ -114,6 +84,7 @@ export abstract class AzureFunction extends Container {
         super(name, description);
 
         this._logger = new ConsoleLogger();
+        this._dependencyResolver
     }
 
     private getConfigPath(): string {
@@ -161,8 +132,23 @@ export abstract class AzureFunction extends Container {
     }
 
     /**
+	 * Opens the component.
+	 * 
+	 * @param correlationId 	(optional) transaction id to trace execution through call chain.
+     */
+     public async open(correlationId: string): Promise<void> {
+         if (this.isOpen()) return;
+
+         await super.open(correlationId);
+         this.registerServices();
+     }
+
+
+    /**
      * Adds instrumentation to log calls and measure call time.
      * It returns a InstrumentTiming object that is used to end the time measurement.
+     * 
+     * Note: This method has been deprecated. Use AzureFunctionService instead.
      * 
      * @param correlationId     (optional) transaction id to trace execution through call chain.
      * @param name              a method name.
@@ -179,7 +165,7 @@ export abstract class AzureFunction extends Container {
     }
 
     /**
-     * Runs this Azure function, loads container configuration,
+     * Runs this Azure Function, loads container configuration,
      * instantiate components and manage their lifecycle,
      * makes this function ready to access action calls.
      *  
@@ -197,15 +183,41 @@ export abstract class AzureFunction extends Container {
     }
 
     /**
-     * Registers all actions in this Azure function.
-     * 
-     * This method is called by the service and must be overridden
-     * in child classes.
+     * Registers all actions in this lambda function.
+     *
+     * Note: Overloading of this method has been deprecated. Use LambdaService instead.
      */
-    protected abstract register(): void;
+    protected register(): void {}
 
     /**
-     * Registers an action in this Azure function.
+     * Registers all Azure Function services in the container.
+     */
+    protected registerServices(): void {
+        // Extract regular and commandable Azure Function services from references
+        let services = this._references.getOptional<IAzureFunctionService>(
+            new Descriptor("*", "service", "azure-function", "*", "*")
+        );
+        let cmdServices = this._references.getOptional<IAzureFunctionService>(
+            new Descriptor("*", "service", "commandable-azure-function", "*", "*")
+        );
+        services.push(...cmdServices);
+
+        // Register actions defined in those services
+        for (let service of services) {
+            // Check if the service implements required interface
+            if (typeof service.getActions !== "function") continue;
+
+            let actions = service.getActions();
+            for (let action of actions) {
+                this.registerAction(action.cmd, action.schema, action.action);
+            }
+        }
+    }
+
+    /**
+     * Registers an action in this Azure Function.
+     * 
+     * Note: This method has been deprecated. Use AzureFunctionService instead.
      * 
      * @param cmd           a action/command name.
      * @param schema        a validation schema to validate received parameters.
@@ -223,6 +235,10 @@ export abstract class AzureFunction extends Container {
 
         if (typeof action != "function") {
             throw new UnknownException(null, 'ACTION_NOT_FUNCTION', 'Action is not a function');
+        }
+
+        if (this._actions.hasOwnProperty(cmd)) {
+            throw new UnknownException(null, 'DUPLICATED_ACTION', `"${cmd}" action already exists`);
         }
 
         // Hack!!! Wrapping action to preserve prototyping context
@@ -243,10 +259,38 @@ export abstract class AzureFunction extends Container {
         this._actions[cmd] = actionCurl;
     }
 
-    private async execute(context: any): Promise<any> {
-        let cmd: string = context.cmd;
-        let correlationId = context.correlation_id;
-        
+    /**
+     * Allow overriders to modify context object.
+     *
+     * @params context the event parameters (or function arguments)
+     * @returns context modified by overriders.
+     */
+    protected prepareContext(context: any): any {
+        return context;
+    }
+
+    /**
+     * Allow overriders to modify result object.
+     *
+     * @params result the response from the business logic
+     * @returns result modified by overriders.
+     */
+    protected prepareResult(result: any): any {
+        return result;
+    }
+
+    /**
+     * Executes this Azure Function and returns the result.
+     * This method can be overloaded in child classes
+     * if they need to change the default behavior
+     * 
+     * @params event the event parameters (or function arguments)
+     * @returns the result of the function execution.
+     */
+    protected async execute(event: any): Promise<any> {
+        event = this.prepareContext(event);
+        let cmd: string = event.cmd;
+        let correlationId = event.correlation_id;
         if (cmd == null) {
             throw new BadRequestException(
                 correlationId, 
@@ -265,37 +309,37 @@ export abstract class AzureFunction extends Container {
             .withDetails('command', cmd);
         }
         
-        return action(context);
+        return this.prepareResult(await action(event));
     }
     
-    private async handler(context: any): Promise<any> {
+    private async handler(event: any): Promise<any> {
         // If already started then execute
         if (this.isOpen()) {
-            return this.execute(context);
+            return this.execute(event);
         }
         // Start before execute
         await this.run();
-        return this.execute(context);
+        return this.execute(event);
     }
     
     /**
-     * Gets entry point into this Azure function.
+     * Gets entry point into this Azure Function.
      * 
-     * @param context     an incoming context object with invocation parameters.
+     * @param event     an incoming event object with invocation parameters.
      */
-    public getHandler(): (context: any) => Promise<any> {
+    public getHandler(): (event: any) => Promise<any> {
         let self = this;
         
         // Return plugin function
-        return async function (context) {
+        return async function (event) {
             // Calling run with changed context
-            return self.handler.call(self, context);
+            return self.handler.call(self, event);
         }
     }
 
     /**
-     * Calls registered action in this Azure function.
-     * "cmd" parameter in the action parameters determine
+     * Calls registered action in this Azure Function.
+     * "cmd" parameter in the action parameters determin
      * what action shall be called.
      * 
      * This method shall only be used in testing.
