@@ -184,9 +184,9 @@ export abstract class AzureFunction extends Container {
     }
 
     /**
-     * Registers all actions in this lambda function.
+     * Registers all actions in this Azure Function.
      *
-     * Note: Overloading of this method has been deprecated. Use LambdaService instead.
+     * Note: Overloading of this method has been deprecated. Use AzureFunctionService instead.
      */
     protected register(): void {}
 
@@ -225,7 +225,7 @@ export abstract class AzureFunction extends Container {
      * @param action        an action function that is called when action is invoked.
      */
     protected registerAction(cmd: string, schema: Schema, 
-        action: (params: any) => Promise<any>): void {
+        action: (context: any) => Promise<any>): void {
         if (cmd == '') {
             throw new UnknownException(null, 'NO_COMMAND', 'Missing command');
         }
@@ -243,41 +243,41 @@ export abstract class AzureFunction extends Container {
         }
 
         // Hack!!! Wrapping action to preserve prototyping context
-        const actionCurl = (params) => {
+        const actionCurl = (context) => {
             // Perform validation
             if (schema != null) {
-                let correlationId = this.getCorrelationId(params);
-                let err = schema.validateAndReturnException(correlationId, params, false);
+                let correlationId = this.getCorrelationId(context);
+                let err = schema.validateAndReturnException(correlationId, context, false);
                 if (err != null) {
                     throw err;
                 }
             }
 
             // Todo: perform verification?
-            return action.call(this, params);
+            return action.call(this, context);
         };
 
         this._actions[cmd] = actionCurl;
     }
 
     /**
-     * Returns correlationId from Azure Function Event.
+     * Returns correlationId from Azure Function context.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns correlationId from Event
+     * @param context -  Azure Function context
+     * @return Returns correlationId from context
      */
-    protected getCorrelationId(event: any): string {
-        return AzureFunctionContextHelper.getCorrelationId(event);
+    protected getCorrelationId(context: any): string {
+        return AzureFunctionContextHelper.getCorrelationId(context);
     }
 
     /**
-     * Returns command from Azure Function Event.
+     * Returns command from Azure Function context.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns command from Event
+     * @param context -  Azure Function context
+     * @return Returns command from context
      */
-    protected getCommand(event: any): string {
-        return AzureFunctionContextHelper.getCommand(event);
+    protected getCommand(context: any): string {
+        return AzureFunctionContextHelper.getCommand(context);
     }
 
     /**
@@ -285,12 +285,12 @@ export abstract class AzureFunction extends Container {
      * This method can be overloaded in child classes
      * if they need to change the default behavior
      * 
-     * @params event the event parameters (or function arguments)
+     * @params context the context parameters (or function arguments)
      * @returns the result of the function execution.
      */
-    protected async execute(event: any): Promise<any> {
-        let cmd: string = this.getCommand(event);
-        let correlationId = this.getCorrelationId(event);
+    protected async execute(context: any): Promise<any> {
+        let cmd: string = this.getCommand(context);
+        let correlationId = this.getCorrelationId(context);
         if (cmd == null) {
             throw new BadRequestException(
                 correlationId, 
@@ -309,31 +309,31 @@ export abstract class AzureFunction extends Container {
             .withDetails('command', cmd);
         }
         
-        return action(event);
+        return action(context);
     }
     
-    private async handler(event: any): Promise<any> {
+    private async handler(context: any): Promise<any> {
         // If already started then execute
         if (this.isOpen()) {
-            return this.execute(event);
+            return this.execute(context);
         }
         // Start before execute
         await this.run();
-        return this.execute(event);
+        return this.execute(context);
     }
     
     /**
      * Gets entry point into this Azure Function.
      * 
-     * @param event     an incoming event object with invocation parameters.
+     * @param context     an incoming context object with invocation parameters.
      */
-    public getHandler(): (event: any) => Promise<any> {
+    public getHandler(): (context: any) => Promise<any> {
         let self = this;
         
         // Return plugin function
-        return async function (event) {
+        return async function (context) {
             // Calling run with changed context
-            return self.handler.call(self, event);
+            return self.handler.call(self, context);
         }
     }
 
@@ -344,10 +344,10 @@ export abstract class AzureFunction extends Container {
      * 
      * This method shall only be used in testing.
      * 
-     * @param params action parameters.
+     * @param context action parameters.
      */
-    public async act(params: any): Promise<any> {
-        return this.getHandler()(params);
+    public async act(context: any): Promise<any> {
+        return this.getHandler()(context);
     }
 
 }

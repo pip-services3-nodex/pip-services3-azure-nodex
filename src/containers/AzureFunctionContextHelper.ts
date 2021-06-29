@@ -2,9 +2,9 @@
 
 export class AzureFunctionContextHelper {
     /**
-     * Returns correlationId from Azure Function Event.
-     * @param context the event context
-     * @return returns correlationId from Event
+     * Returns correlationId from Azure Function context.
+     * @param context the Azure Function context
+     * @return returns correlationId from context
      */
     public static getCorrelationId(context: any): string {
         let correlationId: string = context.correlation_id || "";
@@ -22,9 +22,9 @@ export class AzureFunctionContextHelper {
     }
 
     /**
-     * Returns command from Azure Function Event.
-     * @param context the event context
-     * @return returns command from Event
+     * Returns command from Azure Function context.
+     * @param context the Azure Function context
+     * @return returns command from context
      */
     public static getCommand(context: any): string {
         let cmd: string = context.cmd || "";
@@ -39,5 +39,22 @@ export class AzureFunctionContextHelper {
             // Ignore the error
         }
         return cmd
+    }
+
+    /**
+     * Returns body from Azure Function context http request.
+     * @param context the Azure Function context
+     * @return returns body from context
+     */
+    public static getHttpRequestBody(context: any): string {
+        let body: any = context;
+        try {
+            if (context.hasOwnProperty('req')) {
+                body = context.req.body;
+            }
+        } catch (e) {
+            // Ignore the error
+        }
+        return body
     }
 }

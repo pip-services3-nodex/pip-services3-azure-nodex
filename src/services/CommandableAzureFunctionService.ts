@@ -5,6 +5,7 @@ import { CommandSet } from 'pip-services3-commons-nodex';
 import { Parameters } from 'pip-services3-commons-nodex';
 
 import { AzureFunctionService } from './AzureFunctionService';
+import {AzureFunctionContextHelper} from "../containers/AzureFunctionContextHelper";
 
 /**
  * Abstract service that receives commands via Azure Function protocol
@@ -63,6 +64,16 @@ export abstract class CommandableAzureFunctionService extends AzureFunctionServi
     }
 
     /**
+     * Returns body from Azure Function context.
+     * This method can be overloaded in child classes
+     * @param context -  Azure Function context
+     * @return Returns body from context
+     */
+    protected getBody(context: any): string {
+        return AzureFunctionContextHelper.getHttpRequestBody(context);
+    }
+
+    /**
      * Registers all actions in Azure Function.
      */
     public register(): void {
@@ -76,8 +87,8 @@ export abstract class CommandableAzureFunctionService extends AzureFunctionServi
 
             this.registerAction(name, null, (context) => {
                 let correlationId = this.getCorrelationId(context);
- 
-                let args = Parameters.fromValue(context);
+                let body = this.getBody(context);
+                let args = Parameters.fromValue(body);
                 args.remove("correlation_id");
 
                 let timing = this.instrument(correlationId, name);

@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AzureFunctionContextHelper = void 0;
 class AzureFunctionContextHelper {
     /**
-     * Returns correlationId from Azure Function Event.
-     * @param context the event context
-     * @return returns correlationId from Event
+     * Returns correlationId from Azure Function context.
+     * @param context the Azure Function context
+     * @return returns correlationId from context
      */
     static getCorrelationId(context) {
         let correlationId = context.correlation_id || "";
@@ -23,9 +23,9 @@ class AzureFunctionContextHelper {
         return correlationId;
     }
     /**
-     * Returns command from Azure Function Event.
-     * @param context the event context
-     * @return returns command from Event
+     * Returns command from Azure Function context.
+     * @param context the Azure Function context
+     * @return returns command from context
      */
     static getCommand(context) {
         let cmd = context.cmd || "";
@@ -41,6 +41,23 @@ class AzureFunctionContextHelper {
             // Ignore the error
         }
         return cmd;
+    }
+    /**
+     * Returns body from Azure Function context http request.
+     * @param context the Azure Function context
+     * @return returns body from context
+     */
+    static getHttpRequestBody(context) {
+        let body = context;
+        try {
+            if (context.hasOwnProperty('req')) {
+                body = context.req.body;
+            }
+        }
+        catch (e) {
+            // Ignore the error
+        }
+        return body;
     }
 }
 exports.AzureFunctionContextHelper = AzureFunctionContextHelper;

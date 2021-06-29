@@ -53,9 +53,9 @@ import { AzureFunctionContextHelper } from '../containers/AzureFunctionContextHe
  *        }
  * 
  *        public register(): void {
- *            registerAction("get_mydata", null, async (params) => {
- *                let correlationId = params.correlation_id;
- *                let id = params.id;
+ *            registerAction("get_mydata", null, async (context) => {
+ *                let correlationId = context.correlation_id;
+ *                let id = context.id;
  *                return await this._controller.getMyData(correlationId, id);
  *            });
  *            ...
@@ -302,20 +302,20 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
     protected abstract register(): void;
 
     /**
-     * Returns correlationId from Azure Function Event.
+     * Returns correlationId from Azure Function context.
      * This method can be overloaded in child classes
-     * @param context - the event context
-     * @return returns correlationId from Event
+     * @param context - the context context
+     * @return returns correlationId from context
      */
     protected getCorrelationId(context: any): string {
         return AzureFunctionContextHelper.getCorrelationId(context);
     }
 
     /**
-     * Returns command from Azure Function Event.
+     * Returns command from Azure Function context.
      * This method can be overloaded in child classes
-     * @param context -  the event context
-     * @return returns command from Event
+     * @param context -  the context context
+     * @return returns command from context
      */
     protected getCommand(context: any): string {
         return AzureFunctionContextHelper.getCommand(context);
@@ -328,7 +328,7 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * 
      * This method shall only be used in testing.
      * 
-     * @param context the event context.
+     * @param context the context context.
      */
      public async act(context: any): Promise<any> {
         let cmd: string = this.getCommand(context);

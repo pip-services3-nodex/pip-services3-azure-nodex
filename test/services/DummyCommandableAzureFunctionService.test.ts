@@ -31,8 +31,12 @@ suite('DummyCommandableAzureFunctionService', () => {
 
         // Create one dummy
         let dummy1 = await lambda.act({
-                cmd: 'dummies.create_dummy',
-                dummy: DUMMY1
+                req: {
+                    body: {
+                        cmd: 'dummies.create_dummy',
+                        dummy: DUMMY1
+                    }
+                }
         });
         assert.isObject(dummy1);
         assert.equal(dummy1.content, DUMMY1.content);
@@ -40,8 +44,12 @@ suite('DummyCommandableAzureFunctionService', () => {
 
         // Create another dummy
         let dummy2 = await lambda.act({
-                cmd: 'dummies.create_dummy',
-                dummy: DUMMY2
+                req: {
+                    body: {
+                        cmd: 'dummies.create_dummy',
+                        dummy: DUMMY2
+                    }
+                }
         });
         assert.isObject(dummy2);
         assert.equal(dummy2.content, DUMMY2.content);
@@ -50,8 +58,12 @@ suite('DummyCommandableAzureFunctionService', () => {
         // Update the dummy
         dummy1.content = 'Updated Content 1'
         const updatedDummy1 = await lambda.act({
-                cmd: 'dummies.update_dummy',
-                dummy: dummy1
+                req: {
+                    body: {
+                        cmd: 'dummies.update_dummy',
+                        dummy: dummy1
+                    }
+                }
         });
         assert.isObject(updatedDummy1);
         assert.equal(updatedDummy1.id, dummy1.id);
@@ -61,13 +73,21 @@ suite('DummyCommandableAzureFunctionService', () => {
 
         // Delete dummy
         await lambda.act({
-                cmd: 'dummies.delete_dummy',
-                dummy_id: dummy1.id
+                req: {
+                    body: {
+                        cmd: 'dummies.delete_dummy',
+                        dummy_id: dummy1.id
+                    }
+                }
         });
 
         const dummy = await lambda.act({
-                cmd: 'dummies.get_dummy_by_id',
-                dummy_id: dummy1.id
+                req: {
+                    body: {
+                        cmd: 'dummies.get_dummy_by_id',
+                        dummy_id: dummy1.id
+                    }
+                }
         });
         assert.isNull(dummy || null);
     });
