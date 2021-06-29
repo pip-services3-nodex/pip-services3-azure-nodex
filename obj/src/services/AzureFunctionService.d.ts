@@ -173,6 +173,20 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      */
     protected abstract register(): void;
     /**
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
+     */
+    protected getCorrelationId(event: any): string;
+    /**
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
+     */
+    protected getCommand(event: any): string;
+    /**
      * Calls registered action in this Azure Function.
      * "cmd" parameter in the action parameters determine
      * what action shall be called.

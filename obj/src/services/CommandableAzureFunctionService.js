@@ -68,7 +68,7 @@ class CommandableAzureFunctionService extends AzureFunctionService_1.AzureFuncti
             let command = commands[index];
             let name = command.getName();
             this.registerAction(name, null, (params) => {
-                let correlationId = params != null ? params.correlation_id : null;
+                let correlationId = this.getCorrelationId(params);
                 let args = pip_services3_commons_nodex_1.Parameters.fromValue(params);
                 args.remove("correlation_id");
                 let timing = this.instrument(correlationId, name);

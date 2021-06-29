@@ -65,7 +65,7 @@ class CommandableAzureFunction extends AzureFunction_1.AzureFunction {
         for (let index = 0; index < commands.length; index++) {
             let command = commands[index];
             this.registerAction(command.getName(), null, (params) => __awaiter(this, void 0, void 0, function* () {
-                let correlationId = params.correlation_id;
+                let correlationId = this.getCorrelationId(params);
                 let args = pip_services3_commons_nodex_1.Parameters.fromValue(params);
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
                 try {

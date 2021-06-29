@@ -127,19 +127,19 @@ export declare abstract class AzureFunction extends Container {
      */
     protected registerAction(cmd: string, schema: Schema, action: (params: any) => Promise<any>): void;
     /**
-     * Allow overriders to modify context object.
-     *
-     * @params context the event parameters (or function arguments)
-     * @returns context modified by overriders.
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
      */
-    protected prepareContext(context: any): any;
+    protected getCorrelationId(event: any): string;
     /**
-     * Allow overriders to modify result object.
-     *
-     * @params result the response from the business logic
-     * @returns result modified by overriders.
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
      */
-    protected prepareResult(context: any, result: any): any;
+    protected getCommand(event: any): string;
     /**
      * Executes this Azure Function and returns the result.
      * This method can be overloaded in child classes

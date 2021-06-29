@@ -61,7 +61,7 @@ export abstract class CommandableAzureFunction extends AzureFunction {
             let command = commands[index];
 
             this.registerAction(command.getName(), null, async params => {
-                let correlationId = params.correlation_id;
+                let correlationId = this.getCorrelationId(params);
                 let args = Parameters.fromValue(params);
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
 

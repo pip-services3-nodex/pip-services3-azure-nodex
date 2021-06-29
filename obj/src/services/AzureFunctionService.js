@@ -17,6 +17,7 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_3 = require("pip-services3-components-nodex");
 const pip_services3_rpc_nodex_1 = require("pip-services3-rpc-nodex");
+const AzureFunctionContextHelper_1 = require("../helpers/AzureFunctionContextHelper");
 /**
  * Abstract service that receives remove calls via Azure Function protocol.
  *
@@ -183,8 +184,8 @@ class AzureFunctionService {
         let actionWrapper = (params) => __awaiter(this, void 0, void 0, function* () {
             // Validate object
             if (schema && params) {
-                // Perform validation                    
-                let correlationId = params.correlation_id;
+                // Perform validation
+                let correlationId = this.getCorrelationId(params);
                 let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err) {
                     throw err;
@@ -264,6 +265,24 @@ class AzureFunctionService {
         this._interceptors.push(action);
     }
     /**
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
+     */
+    getCorrelationId(event) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCorrelationId(event);
+    }
+    /**
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
+     */
+    getCommand(event) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCommand(event);
+    }
+    /**
      * Calls registered action in this Azure Function.
      * "cmd" parameter in the action parameters determine
      * what action shall be called.
@@ -274,8 +293,8 @@ class AzureFunctionService {
      */
     act(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            let cmd = params.cmd;
-            let correlationId = params.correlation_id;
+            let cmd = this.getCommand(params);
+            let correlationId = this.getCorrelationId(params);
             if (cmd == null) {
                 throw new pip_services3_commons_nodex_2.BadRequestException(correlationId, 'NO_COMMAND', 'Cmd parameter is missing');
             }

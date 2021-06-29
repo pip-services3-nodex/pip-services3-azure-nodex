@@ -5,7 +5,7 @@ import { ConfigParams } from 'pip-services3-commons-nodex';
 import { Dummy } from '../Dummy';
 import { DummyCommandableAzureFunction } from './DummyCommandableAzureFunction';
 
-suite('DummyCommandableLambdaFunction', () => {
+suite('DummyCommandableAzureFunction', () => {
     let DUMMY1: Dummy = { id: null, key: "Key 1", content: "Content 1" };
     let DUMMY2: Dummy = { id: null, key: "Key 2", content: "Content 2" };
 

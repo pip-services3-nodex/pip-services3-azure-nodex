@@ -11,6 +11,7 @@ import { PagingParamsSchema } from 'pip-services3-commons-nodex';
 import { AzureFunctionService } from '../../src/services/AzureFunctionService';
 import { IDummyController } from '../IDummyController';
 import { DummySchema } from '../DummySchema';
+import { AzureFunctionRequestSchema } from '../AzureFunctionRequestSchema';
 import { Dummy } from "../Dummy";
 
 export class DummyAzureFunctionService extends AzureFunctionService {
@@ -19,6 +20,19 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     public constructor() {
         super("dummies");
         this._dependencyResolver.put('controller', new Descriptor('pip-services-dummies', 'controller', 'default', '*', '*'));
+    }
+
+    protected getBodyData(context:any): any {
+        let params = {
+            ...context,
+        };
+        if (context.hasOwnProperty('req')) {
+            params = {
+                ...params,
+                ...context.req.body,
+            }
+        }
+        return params;
     }
 
     public setReferences(references: IReferences): void {
@@ -42,6 +56,7 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     }
 
     private async create(params: any): Promise<Dummy> {
+        params = this.getBodyData(params);
         return this._controller.create(
             params.correlation_id,
             params.dummy
@@ -49,6 +64,7 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     }
 
     private async update(params: any): Promise<Dummy> {
+        params = this.getBodyData(params);
         return this._controller.update(
             params.correlation_id,
             params.dummy,
@@ -56,6 +72,7 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     }
 
     private async deleteById(params: any): Promise<Dummy> {
+        params = this.getBodyData(params);
         return this._controller.deleteById(
             params.correlation_id,
             params.dummy_id,
@@ -65,33 +82,48 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     protected register() {
         this.registerAction(
             'get_dummies',
-            new ObjectSchema(true)
-                .withOptionalProperty("filter", new FilterParamsSchema())
-                .withOptionalProperty("paging", new PagingParamsSchema())
+            new AzureFunctionRequestSchema()
+                .withOptionalProperty('body',
+                    new ObjectSchema(true)
+                        .withOptionalProperty("filter", new FilterParamsSchema())
+                        .withOptionalProperty("paging", new PagingParamsSchema())
+                )
             , this.getPageByFilter);
 
         this.registerAction(
             'get_dummy_by_id',
-            new ObjectSchema(true)
-                .withOptionalProperty("dummy_id", TypeCode.String)
+            new AzureFunctionRequestSchema()
+                .withOptionalProperty("body",
+                    new ObjectSchema(true)
+                        .withOptionalProperty("dummy_id", TypeCode.String)
+                )
             , this.getOneById);
 
         this.registerAction(
             'create_dummy',
-            new ObjectSchema(true)
-                .withRequiredProperty("dummy", new DummySchema())
+            new AzureFunctionRequestSchema()
+                .withOptionalProperty("body",
+                    new ObjectSchema(true)
+                        .withRequiredProperty("dummy", new DummySchema())
+                )
             , this.create);
 
         this.registerAction(
             'update_dummy',
-            new ObjectSchema(true)
-                .withRequiredProperty("dummy", new DummySchema())
+            new AzureFunctionRequestSchema()
+                .withOptionalProperty("body",
+                    new ObjectSchema(true)
+                        .withRequiredProperty("dummy", new DummySchema())
+                )
             , this.update);
 
         this.registerAction(
             'delete_dummy',
-            new ObjectSchema(true)
-                .withOptionalProperty("dummy_id", TypeCode.String)
+            new AzureFunctionRequestSchema()
+                .withOptionalProperty("body",
+                    new ObjectSchema(true)
+                        .withOptionalProperty("dummy_id", TypeCode.String)
+                )
             , this.deleteById);
     }
 }

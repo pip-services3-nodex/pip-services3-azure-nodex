@@ -14,6 +14,7 @@ import { CompositeCounters } from 'pip-services3-components-nodex';
 import { ConsoleLogger } from 'pip-services3-components-nodex';
 import { CompositeTracer } from 'pip-services3-components-nodex';
 import { InstrumentTiming } from 'pip-services3-rpc-nodex';
+import { AzureFunctionContextHelper } from '../helpers/AzureFunctionContextHelper';
 
 import { IAzureFunctionService } from '../services/IAzureFunctionService';
 
@@ -245,7 +246,7 @@ export abstract class AzureFunction extends Container {
         const actionCurl = (params) => {
             // Perform validation
             if (schema != null) {
-                let correlationId = params.correlaton_id;
+                let correlationId = this.getCorrelationId(params);
                 let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err != null) {
                     throw err;
@@ -260,23 +261,23 @@ export abstract class AzureFunction extends Container {
     }
 
     /**
-     * Allow overriders to modify context object.
-     *
-     * @params context the event parameters (or function arguments)
-     * @returns context modified by overriders.
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
      */
-    protected prepareContext(context: any): any {
-        return context;
+    protected getCorrelationId(event: any): string {
+        return AzureFunctionContextHelper.getCorrelationId(event);
     }
 
     /**
-     * Allow overriders to modify result object.
-     *
-     * @params result the response from the business logic
-     * @returns result modified by overriders.
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
      */
-    protected prepareResult(context: any, result: any): any {
-        return result;
+    protected getCommand(event: any): string {
+        return AzureFunctionContextHelper.getCommand(event);
     }
 
     /**
@@ -288,9 +289,8 @@ export abstract class AzureFunction extends Container {
      * @returns the result of the function execution.
      */
     protected async execute(event: any): Promise<any> {
-        event = this.prepareContext(event);
-        let cmd: string = event.cmd;
-        let correlationId = event.correlation_id;
+        let cmd: string = this.getCommand(event);
+        let correlationId = this.getCorrelationId(event);
         if (cmd == null) {
             throw new BadRequestException(
                 correlationId, 
@@ -309,7 +309,7 @@ export abstract class AzureFunction extends Container {
             .withDetails('command', cmd);
         }
         
-        return this.prepareResult(event, await action(event));
+        return action(event);
     }
     
     private async handler(event: any): Promise<any> {

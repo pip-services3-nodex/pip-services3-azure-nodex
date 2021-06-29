@@ -15,6 +15,7 @@ import { Schema } from 'pip-services3-commons-nodex';
 
 import { AzureFunctionAction } from './AzureFunctionAction';
 import { IAzureFunctionService } from './IAzureFunctionService';
+import { AzureFunctionContextHelper } from '../helpers/AzureFunctionContextHelper';
 
 /**
  * Abstract service that receives remove calls via Azure Function protocol.
@@ -197,8 +198,8 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
         let actionWrapper = async (params) => {
             // Validate object
             if (schema && params) {
-                // Perform validation                    
-                let correlationId = params.correlation_id;
+                // Perform validation
+                let correlationId = this.getCorrelationId(params);
                 let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err) {
                     throw err;
@@ -301,6 +302,26 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
     protected abstract register(): void;
 
     /**
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
+     */
+    protected getCorrelationId(event: any): string {
+        return AzureFunctionContextHelper.getCorrelationId(event);
+    }
+
+    /**
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
+     */
+    protected getCommand(event: any): string {
+        return AzureFunctionContextHelper.getCommand(event);
+    }
+
+    /**
      * Calls registered action in this Azure Function.
      * "cmd" parameter in the action parameters determine
      * what action shall be called.
@@ -310,8 +331,8 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * @param params action parameters.
      */
      public async act(params: any): Promise<any> {
-        let cmd: string = params.cmd;
-        let correlationId = params.correlation_id;
+        let cmd: string = this.getCommand(params);
+        let correlationId = this.getCorrelationId(params);
         
         if (cmd == null) {
             throw new BadRequestException(

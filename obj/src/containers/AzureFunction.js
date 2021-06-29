@@ -23,6 +23,7 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_3 = require("pip-services3-components-nodex");
 const pip_services3_rpc_nodex_1 = require("pip-services3-rpc-nodex");
+const AzureFunctionContextHelper_1 = require("../helpers/AzureFunctionContextHelper");
 /**
  * Abstract Azure Function, that acts as a container to instantiate and run components
  * and expose them via external entry point.
@@ -227,7 +228,7 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
         const actionCurl = (params) => {
             // Perform validation
             if (schema != null) {
-                let correlationId = params.correlaton_id;
+                let correlationId = this.getCorrelationId(params);
                 let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err != null) {
                     throw err;
@@ -239,22 +240,22 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
         this._actions[cmd] = actionCurl;
     }
     /**
-     * Allow overriders to modify context object.
-     *
-     * @params context the event parameters (or function arguments)
-     * @returns context modified by overriders.
+     * Returns correlationId from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns correlationId from Event
      */
-    prepareContext(context) {
-        return context;
+    getCorrelationId(event) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCorrelationId(event);
     }
     /**
-     * Allow overriders to modify result object.
-     *
-     * @params result the response from the business logic
-     * @returns result modified by overriders.
+     * Returns command from Azure Function Event.
+     * This method can be overloaded in child classes
+     * @param event -  Azure Function Even
+     * @return Returns command from Event
      */
-    prepareResult(context, result) {
-        return result;
+    getCommand(event) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCommand(event);
     }
     /**
      * Executes this Azure Function and returns the result.
@@ -266,9 +267,8 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
      */
     execute(event) {
         return __awaiter(this, void 0, void 0, function* () {
-            event = this.prepareContext(event);
-            let cmd = event.cmd;
-            let correlationId = event.correlation_id;
+            let cmd = this.getCommand(event);
+            let correlationId = this.getCorrelationId(event);
             if (cmd == null) {
                 throw new pip_services3_commons_nodex_1.BadRequestException(correlationId, 'NO_COMMAND', 'Cmd parameter is missing');
             }
@@ -277,7 +277,7 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
                 throw new pip_services3_commons_nodex_1.BadRequestException(correlationId, 'NO_ACTION', 'Action ' + cmd + ' was not found')
                     .withDetails('command', cmd);
             }
-            return this.prepareResult(event, yield action(event));
+            return action(event);
         });
     }
     handler(event) {
