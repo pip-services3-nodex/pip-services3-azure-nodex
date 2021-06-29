@@ -17,7 +17,7 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_3 = require("pip-services3-components-nodex");
 const pip_services3_rpc_nodex_1 = require("pip-services3-rpc-nodex");
-const AzureFunctionContextHelper_1 = require("../helpers/AzureFunctionContextHelper");
+const AzureFunctionContextHelper_1 = require("../containers/AzureFunctionContextHelper");
 /**
  * Abstract service that receives remove calls via Azure Function protocol.
  *
@@ -181,17 +181,17 @@ class AzureFunctionService {
     }
     applyValidation(schema, action) {
         // Create an action function
-        let actionWrapper = (params) => __awaiter(this, void 0, void 0, function* () {
+        let actionWrapper = (context) => __awaiter(this, void 0, void 0, function* () {
             // Validate object
-            if (schema && params) {
+            if (schema && context) {
                 // Perform validation
-                let correlationId = this.getCorrelationId(params);
-                let err = schema.validateAndReturnException(correlationId, params, false);
+                let correlationId = this.getCorrelationId(context);
+                let err = schema.validateAndReturnException(correlationId, context, false);
                 if (err) {
                     throw err;
                 }
             }
-            let result = yield action.call(this, params);
+            let result = yield action.call(this, context);
             return result;
         });
         return actionWrapper;
@@ -201,8 +201,8 @@ class AzureFunctionService {
         for (let index = this._interceptors.length - 1; index >= 0; index--) {
             let interceptor = this._interceptors[index];
             actionWrapper = ((action) => {
-                return (params) => {
-                    return interceptor(params, action);
+                return (context) => {
+                    return interceptor(context, action);
                 };
             })(actionWrapper);
         }
@@ -229,7 +229,7 @@ class AzureFunctionService {
         let registeredAction = {
             cmd: this.generateActionCmd(name),
             schema: schema,
-            action: (params) => { return actionWrapper.call(self, params); }
+            action: (context) => { return actionWrapper.call(self, context); }
         };
         this._actions.push(registeredAction);
     }
@@ -252,14 +252,14 @@ class AzureFunctionService {
         let registeredAction = {
             cmd: this.generateActionCmd(name),
             schema: schema,
-            action: (params) => { return actionWrapper.call(self, params); }
+            action: (context) => { return actionWrapper.call(self, context); }
         };
         this._actions.push(registeredAction);
     }
     /**
      * Registers a middleware for actions in Azure Function service.
      *
-     * @param action        an action function that is called when middleware is invoked.
+     * @param action an action function that is called when middleware is invoked.
      */
     registerInterceptor(action) {
         this._interceptors.push(action);
@@ -267,20 +267,20 @@ class AzureFunctionService {
     /**
      * Returns correlationId from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns correlationId from Event
+     * @param context - the event context
+     * @return returns correlationId from Event
      */
-    getCorrelationId(event) {
-        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCorrelationId(event);
+    getCorrelationId(context) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCorrelationId(context);
     }
     /**
      * Returns command from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns command from Event
+     * @param context -  the event context
+     * @return returns command from Event
      */
-    getCommand(event) {
-        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCommand(event);
+    getCommand(context) {
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getCommand(context);
     }
     /**
      * Calls registered action in this Azure Function.
@@ -289,12 +289,12 @@ class AzureFunctionService {
      *
      * This method shall only be used in testing.
      *
-     * @param params action parameters.
+     * @param context the event context.
      */
-    act(params) {
+    act(context) {
         return __awaiter(this, void 0, void 0, function* () {
-            let cmd = this.getCommand(params);
-            let correlationId = this.getCorrelationId(params);
+            let cmd = this.getCommand(context);
+            let correlationId = this.getCorrelationId(context);
             if (cmd == null) {
                 throw new pip_services3_commons_nodex_2.BadRequestException(correlationId, 'NO_COMMAND', 'Cmd parameter is missing');
             }
@@ -303,7 +303,7 @@ class AzureFunctionService {
                 throw new pip_services3_commons_nodex_2.BadRequestException(correlationId, 'NO_ACTION', 'Action ' + cmd + ' was not found')
                     .withDetails('command', cmd);
             }
-            return action.action(params);
+            return action.action(context);
         });
     }
 }

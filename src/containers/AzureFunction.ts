@@ -14,8 +14,8 @@ import { CompositeCounters } from 'pip-services3-components-nodex';
 import { ConsoleLogger } from 'pip-services3-components-nodex';
 import { CompositeTracer } from 'pip-services3-components-nodex';
 import { InstrumentTiming } from 'pip-services3-rpc-nodex';
-import { AzureFunctionContextHelper } from '../helpers/AzureFunctionContextHelper';
 
+import { AzureFunctionContextHelper } from './AzureFunctionContextHelper';
 import { IAzureFunctionService } from '../services/IAzureFunctionService';
 
 /**

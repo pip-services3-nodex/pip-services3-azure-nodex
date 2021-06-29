@@ -23,7 +23,7 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_3 = require("pip-services3-components-nodex");
 const pip_services3_rpc_nodex_1 = require("pip-services3-rpc-nodex");
-const AzureFunctionContextHelper_1 = require("../helpers/AzureFunctionContextHelper");
+const AzureFunctionContextHelper_1 = require("./AzureFunctionContextHelper");
 /**
  * Abstract Azure Function, that acts as a container to instantiate and run components
  * and expose them via external entry point.

@@ -74,10 +74,10 @@ export abstract class CommandableAzureFunctionService extends AzureFunctionServi
             let command = commands[index];
             let name = command.getName();
 
-            this.registerAction(name, null, (params) => {
-                let correlationId = this.getCorrelationId(params);
+            this.registerAction(name, null, (context) => {
+                let correlationId = this.getCorrelationId(context);
  
-                let args = Parameters.fromValue(params);
+                let args = Parameters.fromValue(context);
                 args.remove("correlation_id");
 
                 let timing = this.instrument(correlationId, name);

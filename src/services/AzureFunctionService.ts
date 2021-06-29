@@ -15,7 +15,7 @@ import { Schema } from 'pip-services3-commons-nodex';
 
 import { AzureFunctionAction } from './AzureFunctionAction';
 import { IAzureFunctionService } from './IAzureFunctionService';
-import { AzureFunctionContextHelper } from '../helpers/AzureFunctionContextHelper';
+import { AzureFunctionContextHelper } from '../containers/AzureFunctionContextHelper';
 
 /**
  * Abstract service that receives remove calls via Azure Function protocol.
@@ -193,34 +193,34 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
         this._interceptors = [];
     }
 
-    protected applyValidation(schema: Schema, action: (params: any) => Promise<any>): (params: any) => Promise<any> {
+    protected applyValidation(schema: Schema, action: (context: any) => Promise<any>): (context: any) => Promise<any> {
         // Create an action function
-        let actionWrapper = async (params) => {
+        let actionWrapper = async (context) => {
             // Validate object
-            if (schema && params) {
+            if (schema && context) {
                 // Perform validation
-                let correlationId = this.getCorrelationId(params);
-                let err = schema.validateAndReturnException(correlationId, params, false);
+                let correlationId = this.getCorrelationId(context);
+                let err = schema.validateAndReturnException(correlationId, context, false);
                 if (err) {
                     throw err;
                 }
             }
 
-            let result = await action.call(this, params);
+            let result = await action.call(this, context);
             return result;
         };
 
         return actionWrapper;
     }
 
-    protected applyInterceptors(action: (params: any) => Promise<any>): (params: any) => Promise<any> {
+    protected applyInterceptors(action: (context: any) => Promise<any>): (context: any) => Promise<any> {
         let actionWrapper = action;
 
         for (let index = this._interceptors.length - 1; index >= 0; index--) {
             let interceptor = this._interceptors[index];
             actionWrapper = ((action) => {
-                return (params) => {
-                    return interceptor(params, action);
+                return (context) => {
+                    return interceptor(context, action);
                 };
             })(actionWrapper);
         }
@@ -243,7 +243,7 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * @param schema        a validation schema to validate received parameters.
      * @param action        an action function that is called when operation is invoked.
      */
-    protected registerAction(name: string, schema: Schema, action: (params: any) => Promise<any>): void {
+    protected registerAction(name: string, schema: Schema, action: (context: any) => Promise<any>): void {
         let actionWrapper = this.applyValidation(schema, action);
         actionWrapper = this.applyInterceptors(actionWrapper);
 
@@ -251,7 +251,7 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
         let registeredAction: AzureFunctionAction = {
             cmd: this.generateActionCmd(name), 
             schema: schema,
-            action: (params) => { return actionWrapper.call(self, params); }
+            action: (context) => { return actionWrapper.call(self, context); }
         };
         this._actions.push(registeredAction);
     }
@@ -265,8 +265,8 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * @param action        an action function that is called when operation is invoked.
      */
     protected registerActionWithAuth(name: string, schema: Schema,
-        authorize: (call: any, next: (call: any) => Promise<any>) => Promise<any>,
-        action: (call: any) => Promise<any>): void {
+        authorize: (context: any, next: (context: any) => Promise<any>) => Promise<any>,
+        action: (context: any) => Promise<any>): void {
     
         let actionWrapper = this.applyValidation(schema, action);
         // Add authorization just before validation
@@ -279,7 +279,7 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
         let registeredAction: AzureFunctionAction = {
             cmd: this.generateActionCmd(name), 
             schema: schema,
-            action: (params) => { return actionWrapper.call(self, params); }
+            action: (context) => { return actionWrapper.call(self, context); }
         };
         this._actions.push(registeredAction);
     }
@@ -287,9 +287,9 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
     /**
      * Registers a middleware for actions in Azure Function service.
      * 
-     * @param action        an action function that is called when middleware is invoked.
+     * @param action an action function that is called when middleware is invoked.
      */
-    protected registerInterceptor(action: (params: any, next: (params: any) => Promise<any>) => Promise<any>): void {
+    protected registerInterceptor(action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void {
         this._interceptors.push(action);
     }
 
@@ -304,21 +304,21 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
     /**
      * Returns correlationId from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns correlationId from Event
+     * @param context - the event context
+     * @return returns correlationId from Event
      */
-    protected getCorrelationId(event: any): string {
-        return AzureFunctionContextHelper.getCorrelationId(event);
+    protected getCorrelationId(context: any): string {
+        return AzureFunctionContextHelper.getCorrelationId(context);
     }
 
     /**
      * Returns command from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns command from Event
+     * @param context -  the event context
+     * @return returns command from Event
      */
-    protected getCommand(event: any): string {
-        return AzureFunctionContextHelper.getCommand(event);
+    protected getCommand(context: any): string {
+        return AzureFunctionContextHelper.getCommand(context);
     }
 
     /**
@@ -328,11 +328,11 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * 
      * This method shall only be used in testing.
      * 
-     * @param params action parameters.
+     * @param context the event context.
      */
-     public async act(params: any): Promise<any> {
-        let cmd: string = this.getCommand(params);
-        let correlationId = this.getCorrelationId(params);
+     public async act(context: any): Promise<any> {
+        let cmd: string = this.getCommand(context);
+        let correlationId = this.getCorrelationId(context);
         
         if (cmd == null) {
             throw new BadRequestException(
@@ -352,7 +352,7 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
             .withDetails('command', cmd);
         }
 
-        return action.action(params);
+        return action.action(context);
     }
 
 }

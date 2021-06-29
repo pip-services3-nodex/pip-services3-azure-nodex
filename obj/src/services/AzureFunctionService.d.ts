@@ -139,8 +139,8 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      * @param correlationId 	(optional) transaction id to trace execution through call chain.
      */
     close(correlationId: string): Promise<void>;
-    protected applyValidation(schema: Schema, action: (params: any) => Promise<any>): (params: any) => Promise<any>;
-    protected applyInterceptors(action: (params: any) => Promise<any>): (params: any) => Promise<any>;
+    protected applyValidation(schema: Schema, action: (context: any) => Promise<any>): (context: any) => Promise<any>;
+    protected applyInterceptors(action: (context: any) => Promise<any>): (context: any) => Promise<any>;
     protected generateActionCmd(name: string): string;
     /**
      * Registers a action in Azure Function function.
@@ -149,7 +149,7 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      * @param schema        a validation schema to validate received parameters.
      * @param action        an action function that is called when operation is invoked.
      */
-    protected registerAction(name: string, schema: Schema, action: (params: any) => Promise<any>): void;
+    protected registerAction(name: string, schema: Schema, action: (context: any) => Promise<any>): void;
     /**
      * Registers an action with authorization.
      *
@@ -158,13 +158,13 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      * @param authorize     an authorization interceptor
      * @param action        an action function that is called when operation is invoked.
      */
-    protected registerActionWithAuth(name: string, schema: Schema, authorize: (call: any, next: (call: any) => Promise<any>) => Promise<any>, action: (call: any) => Promise<any>): void;
+    protected registerActionWithAuth(name: string, schema: Schema, authorize: (context: any, next: (context: any) => Promise<any>) => Promise<any>, action: (context: any) => Promise<any>): void;
     /**
      * Registers a middleware for actions in Azure Function service.
      *
-     * @param action        an action function that is called when middleware is invoked.
+     * @param action an action function that is called when middleware is invoked.
      */
-    protected registerInterceptor(action: (params: any, next: (params: any) => Promise<any>) => Promise<any>): void;
+    protected registerInterceptor(action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void;
     /**
      * Registers all service routes in HTTP endpoint.
      *
@@ -175,17 +175,17 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
     /**
      * Returns correlationId from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns correlationId from Event
+     * @param context - the event context
+     * @return returns correlationId from Event
      */
-    protected getCorrelationId(event: any): string;
+    protected getCorrelationId(context: any): string;
     /**
      * Returns command from Azure Function Event.
      * This method can be overloaded in child classes
-     * @param event -  Azure Function Even
-     * @return Returns command from Event
+     * @param context -  the event context
+     * @return returns command from Event
      */
-    protected getCommand(event: any): string;
+    protected getCommand(context: any): string;
     /**
      * Calls registered action in this Azure Function.
      * "cmd" parameter in the action parameters determine
@@ -193,7 +193,7 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      *
      * This method shall only be used in testing.
      *
-     * @param params action parameters.
+     * @param context the event context.
      */
-    act(params: any): Promise<any>;
+    act(context: any): Promise<any>;
 }

@@ -16,5 +16,5 @@ export class AzureFunctionAction {
     /**
      * Action to be executed
      */
-    public action: (params: any) => Promise<any>;
+    public action: (context: any) => Promise<any>;
 }
