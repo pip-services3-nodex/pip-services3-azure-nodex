@@ -1,3 +1,4 @@
+import { Parameters } from 'pip-services3-commons-nodex';
 
 
 export class AzureFunctionContextHelper {
@@ -46,7 +47,7 @@ export class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    public static getHttpRequestBody(context: any): string {
+    public static getParametrs(context: any): Parameters {
         let body: any = context;
         try {
             if (context.hasOwnProperty('req')) {
@@ -55,6 +56,6 @@ export class AzureFunctionContextHelper {
         } catch (e) {
             // Ignore the error
         }
-        return body
+        return Parameters.fromValue(body)
     }
 }

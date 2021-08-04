@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AzureFunctionContextHelper = void 0;
+const pip_services3_commons_nodex_1 = require("pip-services3-commons-nodex");
 class AzureFunctionContextHelper {
     /**
      * Returns correlationId from Azure Function context.
@@ -47,7 +48,7 @@ class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    static getHttpRequestBody(context) {
+    static getParametrs(context) {
         let body = context;
         try {
             if (context.hasOwnProperty('req')) {
@@ -57,7 +58,7 @@ class AzureFunctionContextHelper {
         catch (e) {
             // Ignore the error
         }
-        return body;
+        return pip_services3_commons_nodex_1.Parameters.fromValue(body);
     }
 }
 exports.AzureFunctionContextHelper = AzureFunctionContextHelper;

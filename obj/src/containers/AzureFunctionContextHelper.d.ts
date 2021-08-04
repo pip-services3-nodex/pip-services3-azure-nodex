@@ -1,3 +1,4 @@
+import { Parameters } from 'pip-services3-commons-nodex';
 export declare class AzureFunctionContextHelper {
     /**
      * Returns correlationId from Azure Function context.
@@ -16,5 +17,5 @@ export declare class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    static getHttpRequestBody(context: any): string;
+    static getParametrs(context: any): Parameters;
 }
