@@ -1,5 +1,4 @@
 "use strict";
-/** @module connect */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AzureConnectionResolver = void 0;
+/** @module connect */
+const url = require('url');
 const pip_services3_components_nodex_1 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const AzureConnectionParams_1 = require("./AzureConnectionParams");
@@ -104,8 +105,31 @@ class AzureConnectionResolver {
             connection.append(credentialParams);
             // Perform validation
             connection.validate(correlationId);
+            connection = this.composeConnection(connection);
             return connection;
         });
+    }
+    composeConnection(connection) {
+        connection = AzureConnectionParams_1.AzureConnectionParams.mergeConfigs(connection);
+        let uri = connection.getFunctionUri();
+        if (uri == null || uri == "") {
+            let protocol = connection.getProtocol();
+            let appName = connection.getAppName();
+            let functionName = connection.getFunctionName();
+            // http://myapp.azurewebsites.net/api/myfunction
+            uri = `${protocol}://${appName}.azurewebsites.net/api/${functionName}`;
+            connection.setFunctionUri(uri);
+        }
+        else {
+            let address = url.parse(uri);
+            let protocol = ("" + address.protocol).replace(':', '');
+            let appName = address.host.replace('.azurewebsites.net', '');
+            let functionName = address.path.replace('/api/', '');
+            connection.setProtocol(protocol);
+            connection.setAppName(appName);
+            connection.setFunctionName(functionName);
+        }
+        return connection;
     }
 }
 exports.AzureConnectionResolver = AzureConnectionResolver;

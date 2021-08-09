@@ -16,6 +16,7 @@ const pip_services3_components_nodex_2 = require("pip-services3-components-nodex
  * ### Configuration parameters ###
  *
  * - uri:           full connection uri with specific app and function name
+ * - protocol:      connection protocol
  * - app_name:      alternative app name
  * - function_name: application function name
  * - auth_code:     authorization code or null if using custom auth
@@ -28,12 +29,14 @@ const pip_services3_components_nodex_2 = require("pip-services3-components-nodex
  *
  *     let connection = AzureConnectionParams.fromTuples(
  *         "uri", "http://myapp.azurewebsites.net/api/myfunction",
+ *         "protocol", "http",
  *         "app_name", "myapp",
  *         "function_name", "myfunction",
  *         "auth_code", "code",
  *     );
  *
  *     const uri = connection.getFunctionUri();             // Result: "http://myapp.azurewebsites.net/api/myfunction"
+ *     const protocol = connection.getAppName();            // Result: "http"
  *     const appName = connection.getAppName();             // Result: "myapp"
  *     const functionName = connection.getFunctionName();   // Result: "myfunction"
  *     const authCode = connection.getAuthCode();           // Result: "code"
@@ -46,6 +49,22 @@ class AzureConnectionParams extends pip_services3_commons_nodex_1.ConfigParams {
      */
     constructor(values = null) {
         super(values);
+    }
+    /**
+     * Gets the Azure function connection protocol.
+     *
+     * @returns {string} the Azure function connection protocol.
+     */
+    getProtocol() {
+        return super.getAsNullableString("protocol");
+    }
+    /**
+     * Sets the Azure function connection protocol.
+     *
+     * @param value a new Azure function connection protocol.
+     */
+    setProtocol(value) {
+        super.put("protocol", value);
     }
     /**
      * Gets the Azure function uri.
@@ -129,10 +148,15 @@ class AzureConnectionParams extends pip_services3_commons_nodex_1.ConfigParams {
      */
     validate(correlationId) {
         const uri = this.getFunctionUri();
+        const protocol = this.getProtocol();
         const appName = this.getAppName();
         const functionName = this.getFunctionName();
-        if (uri === null || (appName === null && functionName === null)) {
+        if (uri === null && (appName === null && functionName === null && protocol === null)) {
             throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_CONNECTION_URI", "No uri, app_name and function_name is configured in Auzre function uri");
+        }
+        if (protocol != null && "http" != protocol && "https" != protocol) {
+            throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "WRONG_PROTOCOL", "Protocol is not supported by REST connection")
+                .withDetails("protocol", protocol);
         }
         if (this.getAuthCode() == null) {
             throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_ACCESS_KEY", "No access_key is configured in AWS credential");

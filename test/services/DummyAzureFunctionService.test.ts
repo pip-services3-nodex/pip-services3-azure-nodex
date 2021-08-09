@@ -30,7 +30,7 @@ suite('DummyAzureFunctionService', () => {
     test('CRUD Operations', async () => {
 
         // Create one dummy
-        let dummy1 = await lambda.act({
+        let response = await lambda.act({
                 req: {
                     body: {
                         cmd: 'dummies.create_dummy',
@@ -38,12 +38,13 @@ suite('DummyAzureFunctionService', () => {
                     }
                 }
         });
+        let dummy1 = response.body;
         assert.isObject(dummy1);
         assert.equal(dummy1.content, DUMMY1.content);
         assert.equal(dummy1.key, DUMMY1.key);
 
         // Create another dummy
-        let dummy2 = await lambda.act({
+        response = await lambda.act({
             req: {
                 body: {
                     cmd: 'dummies.create_dummy',
@@ -51,13 +52,14 @@ suite('DummyAzureFunctionService', () => {
                 }
             }
         });
+        let dummy2 = response.body;
         assert.isObject(dummy2);
         assert.equal(dummy2.content, DUMMY2.content);
         assert.equal(dummy2.key, DUMMY2.key);
 
         // Update the dummy
         dummy1.content = 'Updated Content 1'
-        const updatedDummy1 = await lambda.act({
+        response = await lambda.act({
                 req: {
                     body: {
                         cmd: 'dummies.update_dummy',
@@ -65,6 +67,7 @@ suite('DummyAzureFunctionService', () => {
                     }
                 }
         });
+        const updatedDummy1 = response.body;
         assert.isObject(updatedDummy1);
         assert.equal(updatedDummy1.id, dummy1.id);
         assert.equal(updatedDummy1.content, dummy1.content);
@@ -81,7 +84,7 @@ suite('DummyAzureFunctionService', () => {
             }
         });
 
-        const dummy = await lambda.act({
+        response = await lambda.act({
                 req: {
                     body: {
                         cmd: 'dummies.get_dummy_by_id',
@@ -89,6 +92,7 @@ suite('DummyAzureFunctionService', () => {
                     }
                 }
         });
+        const dummy = response.body;
         assert.isNull(dummy || null);
     });
 

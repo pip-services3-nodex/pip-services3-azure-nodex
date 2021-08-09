@@ -14,6 +14,7 @@ import { ConnectionParams } from 'pip-services3-components-nodex';
  * ### Configuration parameters ###
  * 
  * - uri:           full connection uri with specific app and function name
+ * - protocol:      connection protocol
  * - app_name:      alternative app name
  * - function_name: application function name
  * - auth_code:     authorization code or null if using custom auth
@@ -26,12 +27,14 @@ import { ConnectionParams } from 'pip-services3-components-nodex';
  * 
  *     let connection = AzureConnectionParams.fromTuples(
  *         "uri", "http://myapp.azurewebsites.net/api/myfunction",
+ *         "protocol", "http",
  *         "app_name", "myapp",
  *         "function_name", "myfunction",
  *         "auth_code", "code",
  *     );
  *     
  *     const uri = connection.getFunctionUri();             // Result: "http://myapp.azurewebsites.net/api/myfunction"
+ *     const protocol = connection.getAppName();            // Result: "http"
  *     const appName = connection.getAppName();             // Result: "myapp"
  *     const functionName = connection.getFunctionName();   // Result: "myfunction"
  *     const authCode = connection.getAuthCode();           // Result: "code"
@@ -44,6 +47,24 @@ export class AzureConnectionParams extends ConfigParams {
      */
     public constructor(values: any = null) {
         super(values);
+    }
+
+    /**
+     * Gets the Azure function connection protocol.
+     *
+     * @returns {string} the Azure function connection protocol.
+     */
+    public getProtocol(): string {
+        return super.getAsNullableString("protocol");
+    }
+
+    /**
+     * Sets the Azure function connection protocol.
+     *
+     * @param value a new Azure function connection protocol.
+     */
+    public setProtocol(value: string) {
+        super.put("protocol", value);
     }
 
     /**
@@ -137,15 +158,22 @@ export class AzureConnectionParams extends ConfigParams {
      */
     public validate(correlationId: string) {
         const uri = this.getFunctionUri();
+        const protocol = this.getProtocol();
         const appName = this.getAppName();
         const functionName = this.getFunctionName();
 
-        if (uri === null || (appName === null && functionName === null)) {
+        if (uri === null && (appName === null && functionName === null && protocol === null)) {
             throw new ConfigException(
                 correlationId,
                 "NO_CONNECTION_URI",
                 "No uri, app_name and function_name is configured in Auzre function uri"
             );
+        }
+
+        if (protocol != null && "http" != protocol && "https" != protocol) {
+            throw new ConfigException(
+                correlationId, "WRONG_PROTOCOL", "Protocol is not supported by REST connection")
+                .withDetails("protocol", protocol);
         }
 
         if (this.getAuthCode() == null) {

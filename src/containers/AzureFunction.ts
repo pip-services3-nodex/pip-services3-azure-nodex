@@ -85,7 +85,6 @@ export abstract class AzureFunction extends Container {
         super(name, description);
 
         this._logger = new ConsoleLogger();
-        this._dependencyResolver
     }
 
     private getConfigPath(): string {

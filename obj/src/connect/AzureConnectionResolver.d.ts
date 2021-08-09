@@ -1,4 +1,3 @@
-/** @module connect */
 import { IConfigurable } from 'pip-services3-commons-nodex';
 import { IReferenceable } from 'pip-services3-commons-nodex';
 import { IReferences } from 'pip-services3-commons-nodex';
@@ -80,4 +79,5 @@ export declare class AzureConnectionResolver implements IConfigurable, IReferenc
      * @see [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]] (in the Pip.Services components package)
      */
     resolve(correlationId: string): Promise<AzureConnectionParams>;
+    private composeConnection;
 }

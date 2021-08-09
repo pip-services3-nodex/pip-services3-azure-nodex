@@ -1,4 +1,3 @@
-import { DataPage } from 'pip-services3-commons-nodex';
 import { Descriptor } from 'pip-services3-commons-nodex';
 import { FilterParams } from 'pip-services3-commons-nodex';
 import { PagingParams} from 'pip-services3-commons-nodex';
@@ -12,10 +11,12 @@ import { AzureFunctionService } from '../../src/services/AzureFunctionService';
 import { IDummyController } from '../IDummyController';
 import { DummySchema } from '../DummySchema';
 import { AzureFunctionRequestSchema } from '../AzureFunctionRequestSchema';
-import { Dummy } from "../Dummy";
 
 export class DummyAzureFunctionService extends AzureFunctionService {
     private _controller: IDummyController;
+    private _headers = {
+        'Content-Type': 'application/json'
+    };
 
     public constructor() {
         super("dummies");
@@ -40,43 +41,48 @@ export class DummyAzureFunctionService extends AzureFunctionService {
         this._controller = this._dependencyResolver.getOneRequired<IDummyController>('controller');
     }
 
-    private async getPageByFilter(params: any): Promise<DataPage<Dummy>> {
-        return this._controller.getPageByFilter(
+    private async getPageByFilter(params: any): Promise<any> {
+        const page = await this._controller.getPageByFilter(
             params.correlation_id,
             new FilterParams(params.filter),
             new PagingParams(params.paging)
         );
+        return { body: page, headers: this._headers };
     }
 
-    private async getOneById(params: any): Promise<Dummy> {
-        return this._controller.getOneById(
+    private async getOneById(params: any): Promise<any> {
+        const dummy = await this._controller.getOneById(
             params.correlation_id,
             params.dummy_id
         );
+        return { body: dummy, headers: this._headers };
     }
 
-    private async create(params: any): Promise<Dummy> {
+    private async create(params: any): Promise<any> {
         params = this.getBodyData(params);
-        return this._controller.create(
+        const dummy = await this._controller.create(
             params.correlation_id,
             params.dummy
         );
+        return { body: dummy, headers: this._headers };
     }
 
-    private async update(params: any): Promise<Dummy> {
+    private async update(params: any): Promise<any> {
         params = this.getBodyData(params);
-        return this._controller.update(
+        const dummy = await this._controller.update(
             params.correlation_id,
             params.dummy,
         );
+        return { body: dummy, headers: this._headers };
     }
 
-    private async deleteById(params: any): Promise<Dummy> {
+    private async deleteById(params: any): Promise<any> {
         params = this.getBodyData(params);
-        return this._controller.deleteById(
+        const dummy = await this._controller.deleteById(
             params.correlation_id,
             params.dummy_id,
         );
+        return { body: dummy, headers: this._headers };
     }
 
     protected register() {

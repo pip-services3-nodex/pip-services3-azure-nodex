@@ -9,6 +9,7 @@ import { ConfigParams } from 'pip-services3-commons-nodex';
  * ### Configuration parameters ###
  *
  * - uri:           full connection uri with specific app and function name
+ * - protocol:      connection protocol
  * - app_name:      alternative app name
  * - function_name: application function name
  * - auth_code:     authorization code or null if using custom auth
@@ -21,12 +22,14 @@ import { ConfigParams } from 'pip-services3-commons-nodex';
  *
  *     let connection = AzureConnectionParams.fromTuples(
  *         "uri", "http://myapp.azurewebsites.net/api/myfunction",
+ *         "protocol", "http",
  *         "app_name", "myapp",
  *         "function_name", "myfunction",
  *         "auth_code", "code",
  *     );
  *
  *     const uri = connection.getFunctionUri();             // Result: "http://myapp.azurewebsites.net/api/myfunction"
+ *     const protocol = connection.getAppName();            // Result: "http"
  *     const appName = connection.getAppName();             // Result: "myapp"
  *     const functionName = connection.getFunctionName();   // Result: "myfunction"
  *     const authCode = connection.getAuthCode();           // Result: "code"
@@ -38,6 +41,18 @@ export declare class AzureConnectionParams extends ConfigParams {
      * @param values 	(optional) an object to be converted into key-value pairs to initialize this connection.
      */
     constructor(values?: any);
+    /**
+     * Gets the Azure function connection protocol.
+     *
+     * @returns {string} the Azure function connection protocol.
+     */
+    getProtocol(): string;
+    /**
+     * Sets the Azure function connection protocol.
+     *
+     * @param value a new Azure function connection protocol.
+     */
+    setProtocol(value: string): void;
     /**
      * Gets the Azure function uri.
      *

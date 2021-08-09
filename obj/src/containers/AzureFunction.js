@@ -89,7 +89,6 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
          */
         this._configPath = './config/config.yml';
         this._logger = new pip_services3_components_nodex_2.ConsoleLogger();
-        this._dependencyResolver;
     }
     getConfigPath() {
         return process.env.CONFIG_PATH || this._configPath;

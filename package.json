@@ -43,7 +43,10 @@
         "pip-services3-commons-nodex": "^1.0.1",
         "pip-services3-components-nodex": "^1.2.2",
         "pip-services3-container-nodex": "^1.0.2",
-        "pip-services3-rpc-nodex": "^1.0.2"
+        "pip-services3-rpc-nodex": "^1.0.2",
+        "restify": "8.5.1",
+        "restify-clients": "^2.6.4",
+        "restify-cors-middleware2": "2.1.2"
     },
     "devDependencies": {
         "@azure/functions": "^1.2.3",
