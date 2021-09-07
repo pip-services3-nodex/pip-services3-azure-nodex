@@ -17,44 +17,48 @@ export class DummyAzureFunctionClient extends AzureFunctionClient implements IDu
     }
 
     public async getDummies(correlationId: string, filter: FilterParams, paging: PagingParams): Promise<DataPage<Dummy>> {
-        const response = await this.call<DummyAzureFunctionClientResponse>('dummy.get_dummies', correlationId, {
+        const response = await this.call<DummyAzureFunctionClientResponse>('dummies.get_dummies', correlationId, {
             filter: filter,
             paging: paging
         });
 
-        return response.body as DataPage<Dummy>;
+        return response as DataPage<Dummy>;
     }
 
     public async getDummyById(correlationId: string, dummyId: string): Promise<Dummy> {
-        const response = await this.call<DummyAzureFunctionClientResponse>('dummy.get_dummy_by_id', correlationId, {
+        const response = await this.call<DummyAzureFunctionClientResponse>('dummies.get_dummy_by_id', correlationId, {
                 dummy_id: dummyId
         });
 
-        return response.body as Dummy;
+        if (response == null || Object.keys(response).length === 0) {
+            return null;
+        }
+
+        return response as Dummy;
     }
 
     public async createDummy(correlationId: string, dummy: any): Promise<Dummy> {
-        const response = await this.call<DummyAzureFunctionClientResponse>('dummy.create_dummy', correlationId, {
+        const response = await this.call<DummyAzureFunctionClientResponse>('dummies.create_dummy', correlationId, {
                 dummy: dummy
         });
 
-        return response.body as Dummy;
+        return response as Dummy;
     }
 
     public async updateDummy(correlationId: string, dummy: any): Promise<Dummy> {
-        const response = await this.call<DummyAzureFunctionClientResponse>('dummy.update_dummy', correlationId, {
+        const response = await this.call<DummyAzureFunctionClientResponse>('dummies.update_dummy', correlationId, {
                 dummy: dummy
         });
 
-        return response.body as Dummy;
+        return response as Dummy;
     }
 
     public async deleteDummy(correlationId: string, dummyId: string): Promise<Dummy> {
-        const response = await this.call<DummyAzureFunctionClientResponse>('dummy.delete_dummy', correlationId, {
+        const response = await this.call<DummyAzureFunctionClientResponse>('dummies.delete_dummy', correlationId, {
                 dummy_id: dummyId
         });
 
-        return response.body as Dummy;
+        return response as Dummy;
     }
 
 }

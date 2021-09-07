@@ -20,7 +20,7 @@ import { AzureConnectionResolver } from '../connect/AzureConnectionResolver';
 
 
 /**
- * Abstract client that calls AWS Lambda Functions.
+ * Abstract client that calls Azure Functions.
  * 
  * When making calls "cmd" parameter determines which what action shall be called, while
  * other parameters are passed to the action itself.
@@ -28,14 +28,12 @@ import { AzureConnectionResolver } from '../connect/AzureConnectionResolver';
  * ### Configuration parameters ###
  * 
  * - connections:                   
- *     - discovery_key:               (optional) a key to retrieve the connection from [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]]
- *     - region:                      (optional) AWS region
- * - credentials:    
- *     - store_key:                   (optional) a key to retrieve the credentials from [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/auth.icredentialstore.html ICredentialStore]]
- *     - access_id:                   AWS access/client id
- *     - access_key:                  AWS access/client id
- * - options:
- *     - connect_timeout:             (optional) connection timeout in milliseconds (default: 10 sec)
+ *     - uri:                         (optional) full connection string or use protocol, app_name and function_name to build
+ *     - protocol:                    (optional) connection protocol
+ *     - app_name:                    (optional) Azure Function application name
+ *     - function_name:               (optional) Azure Function name
+ * - credentials:
+ *     - auth_code:                   Azure Function auth code if use custom authorization provide empty string
  *  
  * ### References ###
  * 
@@ -44,12 +42,12 @@ import { AzureConnectionResolver } from '../connect/AzureConnectionResolver';
  * - <code>\*:discovery:\*:\*:1.0</code>         (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]] services to resolve connection
  * - <code>\*:credential-store:\*:\*:1.0</code>  (optional) Credential stores to resolve credentials
  * 
- * @see [[LambdaFunction]]
- * @see [[CommandableLambdaClient]]
+ * @see [[AzureFunction]]
+ * @see [[CommandableAzureClient]]
  * 
  * ### Example ###
  * 
- *     class MyLambdaClient extends LambdaClient implements IMyClient {
+ *     class MyAzureFunctionClient extends AzureFunctionClient implements IMyClient {
  *         ...
  *      
  *         public async getData(correlationId: string, id: string): Promise<MyData> {
@@ -62,12 +60,13 @@ import { AzureConnectionResolver } from '../connect/AzureConnectionResolver';
  *         ...
  *     }
  * 
- *     let client = new MyLambdaClient();
+ *     let client = new MyAzureFunctionClient();
  *     client.configure(ConfigParams.fromTuples(
- *         "connection.region", "us-east-1",
- *         "connection.access_id", "XXXXXXXXXXX",
- *         "connection.access_key", "XXXXXXXXXXX",
- *         "connection.arn", "YYYYYYYYYYYYY"
+ *         "connection.uri", "http://myapp.azurewebsites.net/api/myfunction",
+ *         "connection.protocol", "http",
+ *         "connection.app_name", "myapp",
+ *         "connection.function_name", "myfunction"
+ *         "credential.auth_code", "XXXX"
  *     ));
  *     
  *     const result = await client.getData("123", "1");
@@ -78,7 +77,7 @@ export abstract class AzureFunctionClient implements IOpenable, IConfigurable, I
      */
     protected _client: any;
     /**
-     * The AWS connection parameters
+     * The Azure Function connection parameters
      */
     protected _connection: AzureConnectionParams;
 

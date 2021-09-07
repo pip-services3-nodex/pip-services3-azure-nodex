@@ -37,6 +37,7 @@
         "build": "tsc",
         "watch": "tsc --watch",
         "test": "mocha -t 10000 -R spec -u tdd --recursive ./obj/test",
+        "test_cmd": "mocha -t 10000 -R spec -u tdd --recursive ./obj/test -f DummyCommandableAzureFunctionClient",
         "retest": "tsc && mocha -t 10000 -R spec -u tdd --recursive ./obj/test"
     },
     "dependencies": {

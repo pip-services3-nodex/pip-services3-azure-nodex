@@ -29,7 +29,6 @@ export class DummyClientFixture {
         assert.equal(createdDummy2.content, dummy2.content);
         assert.equal(createdDummy2.key, dummy2.key);
         dummy2 = createdDummy2;
-
         // Get all dummies
         const dummyDataPage = await this._client.getDummies(
             null,

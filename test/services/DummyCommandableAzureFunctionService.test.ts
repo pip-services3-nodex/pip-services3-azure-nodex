@@ -3,13 +3,13 @@ const assert = require('chai').assert;
 import { ConfigParams } from 'pip-services3-commons-nodex';
 
 import { Dummy } from '../Dummy';
-import { DummyAzureFunction } from './DummyAzureFunction';
+import { DummyCommandableAzureFunction } from './DummyCommandableAzureFunction';
 
 suite('DummyCommandableAzureFunctionService', () => {
     let DUMMY1: Dummy = { id: null, key: "Key 1", content: "Content 1" };
     let DUMMY2: Dummy = { id: null, key: "Key 2", content: "Content 2" };
 
-    let lambda: DummyAzureFunction;
+    let _functionService: DummyCommandableAzureFunction;
 
     suiteSetup(async () => {
         let config = ConfigParams.fromTuples(
@@ -18,19 +18,19 @@ suite('DummyCommandableAzureFunctionService', () => {
             'service.descriptor', 'pip-services-dummies:service:commandable-azure-function:default:1.0'
         );
 
-        lambda = new DummyAzureFunction();
-        lambda.configure(config);
-        await lambda.open(null);
+        _functionService = new DummyCommandableAzureFunction();
+        _functionService.configure(config);
+        await _functionService.open(null);
     });
 
     suiteTeardown(async () => {
-        await lambda.close(null);
+        await _functionService.close(null);
     });
 
     test('CRUD Operations', async () => {
 
         // Create one dummy
-        let dummy1 = await lambda.act({
+        let dummy1 = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.create_dummy',
@@ -43,7 +43,7 @@ suite('DummyCommandableAzureFunctionService', () => {
         assert.equal(dummy1.key, DUMMY1.key);
 
         // Create another dummy
-        let dummy2 = await lambda.act({
+        let dummy2 = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.create_dummy',
@@ -57,7 +57,7 @@ suite('DummyCommandableAzureFunctionService', () => {
 
         // Update the dummy
         dummy1.content = 'Updated Content 1'
-        const updatedDummy1 = await lambda.act({
+        const updatedDummy1 = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.update_dummy',
@@ -72,7 +72,7 @@ suite('DummyCommandableAzureFunctionService', () => {
         dummy1 = updatedDummy1
 
         // Delete dummy
-        await lambda.act({
+        await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.delete_dummy',
@@ -81,7 +81,7 @@ suite('DummyCommandableAzureFunctionService', () => {
                 }
         });
 
-        const dummy = await lambda.act({
+        const dummy = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.get_dummy_by_id',

@@ -9,7 +9,7 @@ suite('DummyAzureFunctionService', () => {
     let DUMMY1: Dummy = { id: null, key: "Key 1", content: "Content 1" };
     let DUMMY2: Dummy = { id: null, key: "Key 2", content: "Content 2" };
 
-    let lambda: DummyAzureFunction;
+    let _functionService: DummyAzureFunction;
 
     suiteSetup(async () => {
         let config = ConfigParams.fromTuples(
@@ -18,19 +18,19 @@ suite('DummyAzureFunctionService', () => {
             'service.descriptor', 'pip-services-dummies:service:azure-function:default:1.0'
         );
 
-        lambda = new DummyAzureFunction();
-        lambda.configure(config);
-        await lambda.open(null);
+        _functionService = new DummyAzureFunction();
+        _functionService.configure(config);
+        await _functionService.open(null);
     });
 
     suiteTeardown(async () => {
-        await lambda.close(null);
+        await _functionService.close(null);
     });
 
     test('CRUD Operations', async () => {
 
         // Create one dummy
-        let response = await lambda.act({
+        let response = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.create_dummy',
@@ -44,7 +44,7 @@ suite('DummyAzureFunctionService', () => {
         assert.equal(dummy1.key, DUMMY1.key);
 
         // Create another dummy
-        response = await lambda.act({
+        response = await _functionService.act({
             req: {
                 body: {
                     cmd: 'dummies.create_dummy',
@@ -59,7 +59,7 @@ suite('DummyAzureFunctionService', () => {
 
         // Update the dummy
         dummy1.content = 'Updated Content 1'
-        response = await lambda.act({
+        response = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.update_dummy',
@@ -75,7 +75,7 @@ suite('DummyAzureFunctionService', () => {
         dummy1 = updatedDummy1
 
         // Delete dummy
-        await lambda.act({
+        await _functionService.act({
             req: {
                 body: {
                     cmd: 'dummies.delete_dummy',
@@ -84,7 +84,7 @@ suite('DummyAzureFunctionService', () => {
             }
         });
 
-        response = await lambda.act({
+        response = await _functionService.act({
                 req: {
                     body: {
                         cmd: 'dummies.get_dummy_by_id',

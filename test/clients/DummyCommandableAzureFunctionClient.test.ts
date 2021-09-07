@@ -9,12 +9,14 @@ suite('DummyCommandableAzureFunctionClient', ()=> {
     let functionName = process.env['AZURE_FUNCTION_NAME'];
     let protocol = process.env['AZURE_FUNCTION_PROTOCOL'];
     let authCode = process.env['AZURE_FUNCTION_AUTH_CODE'];
+    let uri = process.env['AZURE_FUNCTION_URI'];
 
-    if (!appName || !functionName || !protocol || !authCode) {
+    if (!uri && (!appName || !functionName || !protocol || !authCode)) {
         return;
     }
 
     let config = ConfigParams.fromTuples(
+        'connection.uri', uri,
         'connection.protocol', protocol,
         'connection.app_name', appName,
         'connection.function_name', functionName,
