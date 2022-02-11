@@ -13,14 +13,14 @@ export class DummyCommandableAzureFunctionClient extends CommandableAzureFunctio
     }
 
     public async getDummies(correlationId: string, filter: FilterParams, paging: PagingParams): Promise<DataPage<Dummy>> {
-        return this.callCommand('dummies.get_dummies', correlationId, {
+        return this.callCommand('get_dummies', correlationId, {
                 filter: filter,
                 paging: paging
         });
     }
 
     public async getDummyById(correlationId: string, dummyId: string): Promise<Dummy> {
-        const response = await this.callCommand('dummies.get_dummy_by_id', correlationId, {
+        const response = await this.callCommand('get_dummy_by_id', correlationId, {
                 dummy_id: dummyId
         });
 
@@ -31,19 +31,19 @@ export class DummyCommandableAzureFunctionClient extends CommandableAzureFunctio
     }
 
     public async createDummy(correlationId: string, dummy: any): Promise<Dummy> {
-        return this.callCommand('dummies.create_dummy', correlationId, {
+        return this.callCommand('create_dummy', correlationId, {
                 dummy: dummy
         });
     }
 
     public async updateDummy(correlationId: string, dummy: any): Promise<Dummy> {
-        return this.callCommand('dummies.update_dummy', correlationId, {
+        return this.callCommand('update_dummy', correlationId, {
                 dummy: dummy
         });
     }
 
     public async deleteDummy(correlationId: string, dummyId: string): Promise<Dummy> {
-        return this.callCommand('dummies.delete_dummy', correlationId, {
+        return this.callCommand('delete_dummy', correlationId, {
                 dummy_id: dummyId
         });
     }

@@ -13,11 +13,13 @@ import { ConnectionParams } from 'pip-services3-components-nodex';
  * 
  * ### Configuration parameters ###
  * 
- * - uri:           full connection uri with specific app and function name
- * - protocol:      connection protocol
- * - app_name:      alternative app name
- * - function_name: application function name
- * - auth_code:     authorization code or null if using custom auth
+ * - connections:
+ *      - uri:           full connection uri with specific app and function name
+ *      - protocol:      connection protocol
+ *      - app_name:      alternative app name
+ *      - function_name: application function name
+ * - credentials:
+ *      - auth_code:     authorization code or null if using custom auth
  *
  * In addition to standard parameters [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/classes/auth.credentialparams.html CredentialParams]] may contain any number of custom parameters
  * 
@@ -26,11 +28,11 @@ import { ConnectionParams } from 'pip-services3-components-nodex';
  * ### Example ###
  * 
  *     let connection = AzureConnectionParams.fromTuples(
- *         "uri", "http://myapp.azurewebsites.net/api/myfunction",
- *         "protocol", "http",
- *         "app_name", "myapp",
- *         "function_name", "myfunction",
- *         "auth_code", "code",
+ *         "connection.uri", "http://myapp.azurewebsites.net/api/myfunction",
+ *         "connection.protocol", "http",
+ *         "connection.app_name", "myapp",
+ *         "connection.function_name", "myfunction",
+ *         "connection.auth_code", "code",
  *     );
  *     
  *     const uri = connection.getFunctionUri();             // Result: "http://myapp.azurewebsites.net/api/myfunction"
@@ -219,6 +221,20 @@ export class AzureConnectionParams extends ConfigParams {
 	 */
     public static mergeConfigs(...configs: ConfigParams[]): AzureConnectionParams {
         let config = ConfigParams.mergeConfigs(...configs);
+        return new AzureConnectionParams(config);
+    }
+
+    /**
+     * Creates a new ConfigParams object filled with provided key-value pairs called tuples.
+     * Tuples parameters contain a sequence of key1, value1, key2, value2, ... pairs.
+     *
+     * @param tuples	the tuples to fill a new ConfigParams object.
+     * @returns			a new ConfigParams object.
+     *
+     * @see [[ConfigParams.fromTuples]]
+     */
+    static fromTuples(...tuples: any[]): AzureConnectionParams {
+        let config = ConfigParams.fromTuples(...tuples);
         return new AzureConnectionParams(config);
     }
 }

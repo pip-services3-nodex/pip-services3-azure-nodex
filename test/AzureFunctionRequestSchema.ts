@@ -5,11 +5,8 @@ export class AzureFunctionRequestSchema extends ObjectSchema {
 
     public constructor() {
         super();
-        this.withRequiredProperty('req',
-            new ObjectSchema(true)
-                .withOptionalProperty('body', TypeCode.Map)
-                .withOptionalProperty('query', TypeCode.Map)
-        );
+        this.withOptionalProperty('body', TypeCode.Map);
+        this.withOptionalProperty('query', TypeCode.Map);
     }
 
 }

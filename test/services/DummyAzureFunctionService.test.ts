@@ -31,12 +31,10 @@ suite('DummyAzureFunctionService', () => {
 
         // Create one dummy
         let response = await _functionService.act({
-                req: {
-                    body: {
-                        cmd: 'dummies.create_dummy',
-                        dummy: DUMMY1
-                    }
-                }
+            body: {
+                cmd: 'dummies.create_dummy',
+                dummy: DUMMY1
+            }
         });
         let dummy1 = response.body;
         assert.isObject(dummy1);
@@ -45,11 +43,9 @@ suite('DummyAzureFunctionService', () => {
 
         // Create another dummy
         response = await _functionService.act({
-            req: {
-                body: {
-                    cmd: 'dummies.create_dummy',
-                    dummy: DUMMY2
-                }
+            body: {
+                cmd: 'dummies.create_dummy',
+                dummy: DUMMY2
             }
         });
         let dummy2 = response.body;
@@ -60,12 +56,10 @@ suite('DummyAzureFunctionService', () => {
         // Update the dummy
         dummy1.content = 'Updated Content 1'
         response = await _functionService.act({
-                req: {
-                    body: {
-                        cmd: 'dummies.update_dummy',
-                        dummy: dummy1
-                    }
-                }
+            body: {
+                cmd: 'dummies.update_dummy',
+                dummy: dummy1
+            }
         });
         const updatedDummy1 = response.body;
         assert.isObject(updatedDummy1);
@@ -76,21 +70,17 @@ suite('DummyAzureFunctionService', () => {
 
         // Delete dummy
         await _functionService.act({
-            req: {
-                body: {
-                    cmd: 'dummies.delete_dummy',
-                    dummy_id: dummy1.id
-                }
+            body: {
+                cmd: 'dummies.delete_dummy',
+                dummy_id: dummy1.id
             }
         });
 
         response = await _functionService.act({
-                req: {
-                    body: {
-                        cmd: 'dummies.get_dummy_by_id',
-                        dummy_id: dummy1.id
-                    }
-                }
+            body: {
+                cmd: 'dummies.get_dummy_by_id',
+                dummy_id: dummy1.id
+            }
         });
         const dummy = response.body;
         assert.isNull(dummy || null);

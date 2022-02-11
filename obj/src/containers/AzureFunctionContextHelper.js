@@ -11,10 +11,10 @@ class AzureFunctionContextHelper {
     static getCorrelationId(context) {
         let correlationId = context.correlation_id || "";
         try {
-            if ((correlationId == null || correlationId == "") && context.hasOwnProperty('req')) {
-                correlationId = context.req.body.correlation_id;
+            if ((correlationId == null || correlationId == "") && context.hasOwnProperty('body')) {
+                correlationId = context.body.correlation_id;
                 if (correlationId == null || correlationId == "") {
-                    correlationId = context.req.query.correlation_id;
+                    correlationId = context.query.correlation_id;
                 }
             }
         }
@@ -31,10 +31,10 @@ class AzureFunctionContextHelper {
     static getCommand(context) {
         let cmd = context.cmd || "";
         try {
-            if ((cmd == null || cmd == "") && context.hasOwnProperty('req')) {
-                cmd = context.req.body.cmd;
+            if ((cmd == null || cmd == "") && context.hasOwnProperty('body')) {
+                cmd = context.body.cmd;
                 if (cmd == null || cmd == "") {
-                    cmd = context.context.query.cmd;
+                    cmd = context.query.cmd;
                 }
             }
         }
@@ -51,8 +51,8 @@ class AzureFunctionContextHelper {
     static getParametrs(context) {
         let body = context;
         try {
-            if (context.hasOwnProperty('req')) {
-                body = context.req.body;
+            if (context.hasOwnProperty('body')) {
+                body = context.body;
             }
         }
         catch (e) {

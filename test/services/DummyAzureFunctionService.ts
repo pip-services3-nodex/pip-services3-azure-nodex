@@ -27,10 +27,10 @@ export class DummyAzureFunctionService extends AzureFunctionService {
         let params = {
             ...context,
         };
-        if (context.hasOwnProperty('req')) {
+        if (context.hasOwnProperty('body')) {
             params = {
                 ...params,
-                ...context.req.body,
+                ...context.body,
             }
         }
         return params;
