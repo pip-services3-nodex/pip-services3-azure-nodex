@@ -1,3 +1,4 @@
+/** @module containers */
 import { Parameters } from 'pip-services3-commons-nodex';
 
 
