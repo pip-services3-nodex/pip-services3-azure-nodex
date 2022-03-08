@@ -22,7 +22,7 @@ The module contains the following packages:
 
 Install the NPM package as
 ```bash
-npm install pip-services3-aws-nodex --save
+npm install pip-services3-azure-nodex --save
 ```
 
 ## Develop
