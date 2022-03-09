@@ -1,8 +1,8 @@
 {
     "name": "pip-services3-azure-nodex",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "author": "Conceptual Vision Consulting LLC",
-    "description": "AWS-specific components for Pip.Services in Node.js / ES2017",
+    "description": "Azure-specific components for Pip.Services in Node.js / ES2017",
     "contributors": [
         {
             "name": "Sergey Seroukhov",
@@ -42,7 +42,7 @@
     },
     "dependencies": {
         "pip-services3-commons-nodex": "^1.0.1",
-        "pip-services3-components-nodex": "^1.2.2",
+        "pip-services3-components-nodex": "^1.4.0",
         "pip-services3-container-nodex": "^1.0.2",
         "pip-services3-rpc-nodex": "^1.0.2",
         "restify": "8.5.1",

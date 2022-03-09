@@ -22,7 +22,7 @@ const DummyFactory_1 = require("../DummyFactory");
 const DummySchema_1 = require("../DummySchema");
 class DummyAzureFunction extends AzureFunction_1.AzureFunction {
     constructor() {
-        super("dummy", "Dummy lambda function");
+        super("dummy", "Dummy Azure function");
         this._dependencyResolver.put('controller', new pip_services3_commons_nodex_1.Descriptor('pip-services-dummies', 'controller', 'default', '*', '*'));
         this._factories.add(new DummyFactory_1.DummyFactory());
     }

@@ -6,7 +6,7 @@ const CommandableAzureFunction_1 = require("../../src/containers/CommandableAzur
 const DummyFactory_1 = require("../DummyFactory");
 class DummyCommandableAzureFunction extends CommandableAzureFunction_1.CommandableAzureFunction {
     constructor() {
-        super("dummy", "Dummy lambda function");
+        super("dummy", "Dummy Azure function");
         this._dependencyResolver.put('controller', new pip_services3_commons_nodex_1.Descriptor('pip-services-dummies', 'controller', 'default', '*', '*'));
         this._factories.add(new DummyFactory_1.DummyFactory());
     }

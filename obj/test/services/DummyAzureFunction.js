@@ -5,7 +5,7 @@ const AzureFunction_1 = require("../../src/containers/AzureFunction");
 const DummyFactory_1 = require("../DummyFactory");
 class DummyAzureFunction extends AzureFunction_1.AzureFunction {
     constructor() {
-        super("dummy", "Dummy lambda function");
+        super("dummy", "Dummy Azure function");
         this._factories.add(new DummyFactory_1.DummyFactory());
     }
 }
