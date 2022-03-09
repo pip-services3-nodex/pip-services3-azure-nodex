@@ -227,10 +227,11 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
         const actionCurl = (context) => {
             // Perform validation
             if (schema != null) {
+                let params = Object.assign({}, context.params, context.query, { body: context.body });
                 let correlationId = this.getCorrelationId(context);
-                let err = schema.validateAndReturnException(correlationId, context, false);
+                let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err != null) {
-                    throw err;
+                    return err;
                 }
             }
             // Todo: perform verification?
@@ -316,7 +317,7 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
      */
     act(context) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.getHandler()(context);
+            return this.getHandler()({ body: context });
         });
     }
 }

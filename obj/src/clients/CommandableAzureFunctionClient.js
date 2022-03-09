@@ -85,12 +85,14 @@ class CommandableAzureFunctionClient extends AzureFunctionClient_1.AzureFunction
             const timing = this.instrument(correlationId, this._name + '.' + cmd);
             try {
                 const result = yield this.call(cmd, correlationId, params);
-                timing.endTiming();
                 return result;
             }
             catch (err) {
-                timing.endTiming(err);
-                throw err;
+                timing.endFailure(err);
+                return err;
+            }
+            finally {
+                timing.endTiming();
             }
         });
     }

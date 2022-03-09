@@ -30,43 +30,43 @@ class DummyAzureFunction extends AzureFunction_1.AzureFunction {
         super.setReferences(references);
         this._controller = this._dependencyResolver.getOneRequired('controller');
     }
-    getPageByFilter(params) {
+    getPageByFilter(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._controller.getPageByFilter(params.correlation_id, new pip_services3_commons_nodex_2.FilterParams(params.filter), new pip_services3_commons_nodex_3.PagingParams(params.paging));
+            return this._controller.getPageByFilter(req.body.correlation_id, new pip_services3_commons_nodex_2.FilterParams(req.body.filter), new pip_services3_commons_nodex_3.PagingParams(req.body.paging));
         });
     }
-    getOneById(params) {
+    getOneById(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._controller.getOneById(params.correlation_id, params.dummy_id);
+            return this._controller.getOneById(req.body.correlation_id, req.body.dummy_id);
         });
     }
-    create(params) {
+    create(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._controller.create(params.correlation_id, params.dummy);
+            return this._controller.create(req.body.correlation_id, req.body.dummy);
         });
     }
-    update(params) {
+    update(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._controller.update(params.correlation_id, params.dummy);
+            return this._controller.update(req.body.correlation_id, req.body.dummy);
         });
     }
-    deleteById(params) {
+    deleteById(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._controller.deleteById(params.correlation_id, params.dummy_id);
+            return this._controller.deleteById(req.body.correlation_id, req.body.dummy_id);
         });
     }
     register() {
-        this.registerAction('get_dummies', new pip_services3_commons_nodex_4.ObjectSchema(true)
+        this.registerAction('get_dummies', new pip_services3_commons_nodex_4.ObjectSchema(true).withOptionalProperty('body', new pip_services3_commons_nodex_4.ObjectSchema()
             .withOptionalProperty("filter", new pip_services3_commons_nodex_6.FilterParamsSchema())
-            .withOptionalProperty("paging", new pip_services3_commons_nodex_7.PagingParamsSchema()), this.getPageByFilter);
-        this.registerAction('get_dummy_by_id', new pip_services3_commons_nodex_4.ObjectSchema(true)
-            .withOptionalProperty("dummy_id", pip_services3_commons_nodex_5.TypeCode.String), this.getOneById);
-        this.registerAction('create_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true)
-            .withRequiredProperty("dummy", new DummySchema_1.DummySchema()), this.create);
-        this.registerAction('update_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true)
-            .withRequiredProperty("dummy", new DummySchema_1.DummySchema()), this.update);
-        this.registerAction('delete_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true)
-            .withOptionalProperty("dummy_id", pip_services3_commons_nodex_5.TypeCode.String), this.deleteById);
+            .withOptionalProperty("paging", new pip_services3_commons_nodex_7.PagingParamsSchema())), this.getPageByFilter);
+        this.registerAction('get_dummy_by_id', new pip_services3_commons_nodex_4.ObjectSchema(true).withOptionalProperty('body', new pip_services3_commons_nodex_4.ObjectSchema(true)
+            .withOptionalProperty("dummy_id", pip_services3_commons_nodex_5.TypeCode.String)), this.getOneById);
+        this.registerAction('create_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true).withOptionalProperty('body', new pip_services3_commons_nodex_4.ObjectSchema(true)
+            .withRequiredProperty("dummy", new DummySchema_1.DummySchema())), this.create);
+        this.registerAction('update_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true).withOptionalProperty('body', new pip_services3_commons_nodex_4.ObjectSchema(true)
+            .withRequiredProperty("dummy", new DummySchema_1.DummySchema())), this.update);
+        this.registerAction('delete_dummy', new pip_services3_commons_nodex_4.ObjectSchema(true).withOptionalProperty('body', new pip_services3_commons_nodex_4.ObjectSchema(true)
+            .withOptionalProperty("dummy_id", pip_services3_commons_nodex_5.TypeCode.String)), this.deleteById);
     }
 }
 exports.DummyAzureFunction = DummyAzureFunction;

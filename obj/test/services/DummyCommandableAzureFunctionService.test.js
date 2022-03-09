@@ -28,20 +28,16 @@ suite('DummyCommandableAzureFunctionService', () => {
     test('CRUD Operations', () => __awaiter(void 0, void 0, void 0, function* () {
         // Create one dummy
         let dummy1 = yield _functionService.act({
-            body: {
-                cmd: 'dummies.create_dummy',
-                dummy: DUMMY1
-            }
+            cmd: 'dummies.create_dummy',
+            dummy: DUMMY1
         });
         assert.isObject(dummy1);
         assert.equal(dummy1.content, DUMMY1.content);
         assert.equal(dummy1.key, DUMMY1.key);
         // Create another dummy
         let dummy2 = yield _functionService.act({
-            body: {
-                cmd: 'dummies.create_dummy',
-                dummy: DUMMY2
-            }
+            cmd: 'dummies.create_dummy',
+            dummy: DUMMY2
         });
         assert.isObject(dummy2);
         assert.equal(dummy2.content, DUMMY2.content);
@@ -49,10 +45,8 @@ suite('DummyCommandableAzureFunctionService', () => {
         // Update the dummy
         dummy1.content = 'Updated Content 1';
         const updatedDummy1 = yield _functionService.act({
-            body: {
-                cmd: 'dummies.update_dummy',
-                dummy: dummy1
-            }
+            cmd: 'dummies.update_dummy',
+            dummy: dummy1
         });
         assert.isObject(updatedDummy1);
         assert.equal(updatedDummy1.id, dummy1.id);
@@ -61,18 +55,20 @@ suite('DummyCommandableAzureFunctionService', () => {
         dummy1 = updatedDummy1;
         // Delete dummy
         yield _functionService.act({
-            body: {
-                cmd: 'dummies.delete_dummy',
-                dummy_id: dummy1.id
-            }
+            cmd: 'dummies.delete_dummy',
+            dummy_id: dummy1.id
         });
         const dummy = yield _functionService.act({
-            body: {
-                cmd: 'dummies.get_dummy_by_id',
-                dummy_id: dummy1.id
-            }
+            cmd: 'dummies.get_dummy_by_id',
+            dummy_id: dummy1.id
         });
         assert.isNull(dummy || null);
+        // Failed validation
+        let err = yield _functionService.act({
+            cmd: 'dummies.create_dummy',
+            dummy: null
+        });
+        assert.equal(err.code, 'INVALID_DATA');
     }));
 });
 //# sourceMappingURL=DummyCommandableAzureFunctionService.test.js.map

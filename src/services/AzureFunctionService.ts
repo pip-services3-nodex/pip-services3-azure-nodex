@@ -199,10 +199,11 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
             // Validate object
             if (schema && context) {
                 // Perform validation
+                let params = Object.assign({}, context.params, context.query, { body: context.body });
                 let correlationId = this.getCorrelationId(context);
-                let err = schema.validateAndReturnException(correlationId, context, false);
+                let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err) {
-                    throw err;
+                    return err;
                 }
             }
 

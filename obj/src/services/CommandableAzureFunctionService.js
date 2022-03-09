@@ -1,5 +1,14 @@
 "use strict";
 /** @module services */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommandableAzureFunctionService = void 0;
 const AzureFunctionService_1 = require("./AzureFunctionService");
@@ -76,21 +85,22 @@ class CommandableAzureFunctionService extends AzureFunctionService_1.AzureFuncti
         for (let index = 0; index < commands.length; index++) {
             let command = commands[index];
             let name = command.getName();
-            this.registerAction(name, null, (context) => {
+            this.registerAction(name, null, (context) => __awaiter(this, void 0, void 0, function* () {
                 let correlationId = this.getCorrelationId(context);
                 let args = this.getParametrs(context);
                 args.remove("correlation_id");
                 let timing = this.instrument(correlationId, name);
                 try {
-                    return command.execute(correlationId, args);
+                    return yield command.execute(correlationId, args);
                 }
                 catch (ex) {
                     timing.endFailure(ex);
+                    return ex;
                 }
                 finally {
                     timing.endTiming();
                 }
-            });
+            }));
         }
     }
 }

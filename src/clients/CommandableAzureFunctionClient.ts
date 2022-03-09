@@ -76,11 +76,12 @@ export class CommandableAzureFunctionClient extends AzureFunctionClient {
         const timing = this.instrument(correlationId, this._name + '.' + cmd);
         try {
             const result = await this.call<T>(cmd, correlationId, params);
-            timing.endTiming();
             return result;
         } catch (err) {
-            timing.endTiming(err);
-            throw err;
+            timing.endFailure(err);
+            return err;
+        } finally {
+            timing.endTiming();
         }
     }
 }

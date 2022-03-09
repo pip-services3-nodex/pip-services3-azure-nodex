@@ -68,5 +68,13 @@ suite('DummyCommandableAzureFunction', () => {
             dummy_id: dummy1.id
         });
         assert.isNull(dummy || null);
+
+        // Failed validation
+        let err = await _function.act({
+            cmd: 'create_dummy',
+            dummy: null
+        });
+
+        assert.equal(err.code, 'INVALID_DATA');
     });
 });

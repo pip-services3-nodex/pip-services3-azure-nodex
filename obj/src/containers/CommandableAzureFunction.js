@@ -78,13 +78,14 @@ class CommandableAzureFunction extends AzureFunction_1.AzureFunction {
                 let args = this.getParametrs(context);
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
                 try {
-                    const result = yield command.execute(correlationId, args);
-                    timing.endTiming();
-                    return result;
+                    return yield command.execute(correlationId, args);
                 }
                 catch (err) {
-                    timing.endTiming(err);
-                    throw err;
+                    timing.endFailure(err);
+                    return err;
+                }
+                finally {
+                    timing.endTiming();
                 }
             }));
         }

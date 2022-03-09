@@ -245,10 +245,11 @@ export abstract class AzureFunction extends Container {
         const actionCurl = (context) => {
             // Perform validation
             if (schema != null) {
+                let params = Object.assign({}, context.params, context.query, { body: context.body });
                 let correlationId = this.getCorrelationId(context);
-                let err = schema.validateAndReturnException(correlationId, context, false);
+                let err = schema.validateAndReturnException(correlationId, params, false);
                 if (err != null) {
-                    throw err;
+                    return err;
                 }
             }
 
@@ -346,7 +347,7 @@ export abstract class AzureFunction extends Container {
      * @param context action parameters.
      */
     public async act(context: any): Promise<any> {
-        return this.getHandler()(context);
+        return this.getHandler()({ body: context });
     }
 
 }

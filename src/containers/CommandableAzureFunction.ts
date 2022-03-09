@@ -77,12 +77,12 @@ export abstract class CommandableAzureFunction extends AzureFunction {
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
 
                 try {
-                    const result = await command.execute(correlationId, args);
-                    timing.endTiming();
-                    return result;
+                    return await command.execute(correlationId, args);
                 } catch (err) {
-                    timing.endTiming(err);
-                    throw err;
+                    timing.endFailure(err);
+                    return err;
+                } finally {
+                    timing.endTiming();
                 }
             });
         }
