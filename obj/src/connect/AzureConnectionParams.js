@@ -161,7 +161,7 @@ class AzureConnectionParams extends pip_services3_commons_nodex_1.ConfigParams {
                 .withDetails("protocol", protocol);
         }
         if (this.getAuthCode() == null) {
-            throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_ACCESS_KEY", "No access_key is configured in AWS credential");
+            throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_ACCESS_KEY", "No access_key is configured in Azure credential");
         }
     }
     /**

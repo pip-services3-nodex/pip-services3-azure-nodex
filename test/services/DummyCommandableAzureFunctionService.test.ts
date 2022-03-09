@@ -81,5 +81,4 @@ suite('DummyCommandableAzureFunctionService', () => {
         });
         assert.isNull(dummy || null);
     });
-
 });

@@ -70,25 +70,20 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Helper class to retrieve AWS connection and credential parameters,
-						validate them and compose a [[AwsConnectionParams]] value.</p>
+						<p>Helper class to retrieve Azure connection and credential parameters,
+						validate them and compose a <a href="connect.azureconnectionparams.html">AzureConnectionParams</a> value.</p>
 					</div>
 					<h3 id="configuration-parameters">Configuration parameters</h3>
 					<ul>
 						<li>connections:<ul>
-								<li>discovery_key:               (optional) a key to retrieve the connection from <a href="https://pip-services3-node.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html" class="external">IDiscovery</a></li>
-								<li>region:                      (optional) AWS region</li>
-								<li>partition:                   (optional) AWS partition</li>
-								<li>service:                     (optional) AWS service</li>
-								<li>resource_type:               (optional) AWS resource type</li>
-								<li>resource:                    (optional) AWS resource id</li>
-								<li>arn:                         (optional) AWS resource ARN</li>
+								<li>uri:           full connection uri with specific app and function name</li>
+								<li>protocol:      connection protocol</li>
+								<li>app_name:      alternative app name</li>
+								<li>function_name: application function name</li>
 							</ul>
 						</li>
 						<li>credentials:<ul>
-								<li>store_key:                   (optional) a key to retrieve the credentials from <a href="https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/auth.icredentialstore.html" class="external">ICredentialStore</a></li>
-								<li>access_id:                   AWS access/client id</li>
-								<li>access_key:                  AWS access/client id</li>
+								<li>auth_code:     authorization code or null if using custom auth</li>
 							</ul>
 						</li>
 					</ul>
@@ -165,7 +160,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 					<div class="tsd-signature tsd-kind-icon">_connection<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConnectionResolver</span><span class="tsd-signature-symbol"> =&nbsp;new ConnectionResolver()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in connect/AzureConnectionResolver.ts:58</li>
+							<li>Defined in connect/AzureConnectionResolver.ts:53</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -180,7 +175,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 					<div class="tsd-signature tsd-kind-icon">_credential<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CredentialResolver</span><span class="tsd-signature-symbol"> =&nbsp;new CredentialResolver()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in connect/AzureConnectionResolver.ts:62</li>
+							<li>Defined in connect/AzureConnectionResolver.ts:57</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +197,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:69</li>
+									<li>Defined in connect/AzureConnectionResolver.ts:64</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +228,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:94</li>
+									<li>Defined in connect/AzureConnectionResolver.ts:89</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -271,7 +266,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:79</li>
+									<li>Defined in connect/AzureConnectionResolver.ts:74</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

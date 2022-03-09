@@ -182,7 +182,7 @@ export class AzureConnectionParams extends ConfigParams {
             throw new ConfigException(
                 correlationId, 
                 "NO_ACCESS_KEY",
-                "No access_key is configured in AWS credential"
+                "No access_key is configured in Azure credential"
             );
         }
     }

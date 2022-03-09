@@ -16,23 +16,18 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const AzureConnectionParams_1 = require("./AzureConnectionParams");
 /**
- * Helper class to retrieve AWS connection and credential parameters,
- * validate them and compose a [[AwsConnectionParams]] value.
+ * Helper class to retrieve Azure connection and credential parameters,
+ * validate them and compose a [[AzureConnectionParams]] value.
  *
  * ### Configuration parameters ###
  *
  * - connections:
- *     - discovery_key:               (optional) a key to retrieve the connection from [[https://pip-services3-node.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]]
- *     - region:                      (optional) AWS region
- *     - partition:                   (optional) AWS partition
- *     - service:                     (optional) AWS service
- *     - resource_type:               (optional) AWS resource type
- *     - resource:                    (optional) AWS resource id
- *     - arn:                         (optional) AWS resource ARN
+ *      - uri:           full connection uri with specific app and function name
+ *      - protocol:      connection protocol
+ *      - app_name:      alternative app name
+ *      - function_name: application function name
  * - credentials:
- *     - store_key:                   (optional) a key to retrieve the credentials from [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/auth.icredentialstore.html ICredentialStore]]
- *     - access_id:                   AWS access/client id
- *     - access_key:                  AWS access/client id
+ *      - auth_code:     authorization code or null if using custom auth
  *
  * ### References ###
  *
