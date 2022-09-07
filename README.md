@@ -12,11 +12,11 @@ The module contains the following packages:
 
 <a name="links"></a> Quick links:
 
-* [Configuration Pattern](http://docs.pipservices.org/toolkit/getting_started/configurations/) 
+* [Configuration](http://docs.pipservices.org/conceptual/configuration/)
 * [API Reference](https://pip-services3-nodex.github.io/pip-services3-azue-nodex/globals.html)
 * [Change Log](CHANGELOG.md)
 * [Get Help](http://docs.pipservices.org/get_help/)
-* [Contribute](http://docs.pipservices.org/toolkit/contribute/)
+* [Contribute](http://docs.pipservices.org/contribute/)
 
 ## Use
 
@@ -28,7 +28,7 @@ npm install pip-services3-azure-nodex --save
 ## Develop
 
 For development you shall install the following prerequisites:
-* Node.js 8+
+* Node.js 14+
 * Visual Studio Code or another IDE of your choice
 * Docker
 * Typescript

@@ -262,8 +262,17 @@ class AzureFunctionService {
      *
      * @param action an action function that is called when middleware is invoked.
      */
-    registerInterceptor(action) {
-        this._interceptors.push(action);
+    registerInterceptor(cmd, action) {
+        let self = this;
+        let interceptorWrapper = (req, next) => __awaiter(this, void 0, void 0, function* () {
+            let currCmd = this.getCommand(req);
+            let match = (currCmd.match(cmd) || []).length > 0;
+            if (cmd != null && cmd != "" && !match)
+                return yield next.call(self, req);
+            else
+                return yield action.call(self, req, next);
+        });
+        this._interceptors.push(interceptorWrapper);
     }
     /**
      * Returns correlationId from Azure Function context.

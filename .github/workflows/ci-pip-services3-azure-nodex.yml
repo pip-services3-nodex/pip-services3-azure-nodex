@@ -1,5 +1,6 @@
-name: Pip.Services Azure toolkit in Nodex
+name: Pip.Services Azure NodeX Delivery
 
+# Configure trigger rules
 on: 
   push:
     paths:
@@ -7,70 +8,98 @@ on:
     - '!README.md'
 
 jobs:
-  ci:
-    runs-on: ubuntu-18.04
+  # Setup job
+  setup:
+    runs-on: ubuntu-20.04
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+
     steps:
-    - uses: actions/checkout@main
-  
-    ############# Prepare #############
+    - name: Checkout source code
+      uses: actions/checkout@main
 
-    - name: Install prereq and save build number
-      id: build_info
-      uses: pip-devops/actions/node/prepare@v1
+    - name: Pull delivery scripts
+      shell: bash
+      run: |
+        rm -rf script-delivery-ps
+        git clone ${{ secrets.SCRIPTS_DELIVERY_PS_GIT_URL }} script-delivery-ps
 
-    ############# Build and test #############
+    - name: Execute increment script
+      shell: bash
+      run: ./script-delivery-ps/setup/increment/increment.ps1
 
-    - name: Build the component
-      uses: pip-devops/actions/node/build@v1
+    - name: Execute prerequisites script
+      shell: bash
+      run: ./script-delivery-ps/setup/prereqs/prereqs.ps1
 
-    - name: Test the component
-      uses: pip-devops/actions/node/test@v1
-
-    ############# Tag #############
-
-    - name: Delete existing tag
-      uses: dev-drprasad/delete-tag-and-release@v0.1.2
+    - name: Cache intermediate data
+      uses: actions/cache@v3
       with:
-        delete_release: true
-        tag_name: "v${{ steps.build_info.outputs.component_version }}-${{ steps.build_info.outputs.build_number }}"
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+  # Authoring job
+  authoring:
+    needs: setup
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@main
+
+    - name: Get cached intermediate data
+      uses: actions/cache@v3
+      with:
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+    - name: Execute build script
+      shell: bash
+      run: script-delivery-ps/authoring/build/build.ps1
+
+    - name: Execute test script
+      shell: bash
+      run: ./script-delivery-ps/authoring/test/test.ps1
+
+    - name: Execute package script
+      shell: bash
+      run: ./script-delivery-ps/authoring/package/package.ps1
+
+    - name: Execute publish script
+      shell: bash
+      run: ./script-delivery-ps/authoring/publish/publish.ps1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: Tag branch with the build number
-      uses: tvdias/github-tagger@v0.0.1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        tag: "v${{ steps.build_info.outputs.component_version }}-${{ steps.build_info.outputs.build_number }}"
+    - name: Execute tag script
+      shell: bash
+      run: ./script-delivery-ps/authoring/tag/tag.ps1
 
-    ############# Release #############
-
-    - name: Release binary artifacts
-      uses: pip-devops/actions/node/release@v1
-      with:
-        npm-token: ${{ secrets.NPM_TOKEN }}
-
-    ############# Clear #############
-
-    - name: Clean up
+    - name: Execute clean script
       if: always()
-      uses: pip-devops/actions/node/clear@v1
-    
-  metrics:
-    needs: ci
+      shell: bash
+      run: ./script-delivery-ps/authoring/clean/clean.ps1
+
+  # Measure job
+  measure:
+    needs: authoring
     if: always()
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps: 
-    ############# Send pipeline metrics #############
-
-    - name: Send pipeline metrics
-      uses: pip-devops/actions/pipeline-metrics@v1
+    - name: Get cached intermediate data
+      uses: actions/cache@v3
       with:
-        pipeline-organization: $(echo '${{ github.repository }}' | awk -F '/' '{print $1}')
-        pipeline-name: $(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-s3-bucket: ${{ secrets.AWS_S3_BUCKET }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-    
+        path: |
+          script-delivery-ps
+          component*.json
+        key: delivery-${{ github.run_id }}-${{ github.run_attempt }}
+
+    - name: Execute measure script
+      env:
+        name: $(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+      run: ./script-delivery-ps/measure/measure.ps1 ${{ github.repository_owner }} ${{ env.name }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_S3_BUCKET }} ${{ secrets.GITHUB_TOKEN }}
+      shell: bash

@@ -164,7 +164,7 @@ export declare abstract class AzureFunctionService implements IAzureFunctionServ
      *
      * @param action an action function that is called when middleware is invoked.
      */
-    protected registerInterceptor(action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void;
+    protected registerInterceptor(cmd: string, action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void;
     /**
      * Registers all service routes in HTTP endpoint.
      *

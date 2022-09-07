@@ -83,6 +83,12 @@
 								<li>function_name:               (optional) Azure Function name</li>
 							</ul>
 						</li>
+						<li>options:<ul>
+								<li>retries:               number of retries (default: 3)</li>
+								<li>connect_timeout:       connection timeout in milliseconds (default: 10 sec)</li>
+								<li>timeout:               invocation timeout in milliseconds (default: 10 sec)</li>
+							</ul>
+						</li>
 						<li>credentials:<ul>
 								<li>auth_code:                   Azure Function auth code if use custom authorization provide empty string</li>
 							</ul>
@@ -200,7 +206,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in clients/CommandableAzureFunctionClient.ts:53</li>
+									<li>Defined in clients/CommandableAzureFunctionClient.ts:57</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +239,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_client">_client</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:78</li>
+							<li>Defined in clients/AzureFunctionClient.ts:82</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -249,7 +255,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_connecttimeout">_connectTimeout</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:92</li>
+							<li>Defined in clients/AzureFunctionClient.ts:96</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -265,7 +271,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_connection">_connection</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:82</li>
+							<li>Defined in clients/AzureFunctionClient.ts:86</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -281,7 +287,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_connectionresolver">_connectionResolver</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:109</li>
+							<li>Defined in clients/AzureFunctionClient.ts:113</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -297,7 +303,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_counters">_counters</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:117</li>
+							<li>Defined in clients/AzureFunctionClient.ts:121</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -313,7 +319,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_dependencyresolver">_dependencyResolver</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:105</li>
+							<li>Defined in clients/AzureFunctionClient.ts:109</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -329,7 +335,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_headers">_headers</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:88</li>
+							<li>Defined in clients/AzureFunctionClient.ts:92</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -345,7 +351,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_logger">_logger</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:113</li>
+							<li>Defined in clients/AzureFunctionClient.ts:117</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -357,11 +363,11 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_retries" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _retries</h3>
-					<div class="tsd-signature tsd-kind-icon">_retries<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+					<div class="tsd-signature tsd-kind-icon">_retries<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;3</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_retries">_retries</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:84</li>
+							<li>Defined in clients/AzureFunctionClient.ts:88</li>
 						</ul>
 					</aside>
 				</section>
@@ -372,7 +378,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_timeout">_timeout</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:96</li>
+							<li>Defined in clients/AzureFunctionClient.ts:100</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -388,7 +394,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_tracer">_tracer</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:121</li>
+							<li>Defined in clients/AzureFunctionClient.ts:125</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -404,7 +410,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#_uri">_uri</a></p>
 						<ul>
-							<li>Defined in clients/AzureFunctionClient.ts:100</li>
+							<li>Defined in clients/AzureFunctionClient.ts:104</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -427,7 +433,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#call">call</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:282</li>
+									<li>Defined in clients/AzureFunctionClient.ts:288</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -477,7 +483,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in clients/CommandableAzureFunctionClient.ts:75</li>
+									<li>Defined in clients/CommandableAzureFunctionClient.ts:79</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,7 +536,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#close">close</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:220</li>
+									<li>Defined in clients/AzureFunctionClient.ts:226</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -562,7 +568,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#configure">configure</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:128</li>
+									<li>Defined in clients/AzureFunctionClient.ts:132</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -594,7 +600,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#instrument">instrument</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:155</li>
+									<li>Defined in clients/AzureFunctionClient.ts:161</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -634,7 +640,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#invoke">invoke</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:245</li>
+									<li>Defined in clients/AzureFunctionClient.ts:251</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -685,7 +691,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#isopen">isOpen</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:170</li>
+									<li>Defined in clients/AzureFunctionClient.ts:176</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -709,7 +715,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#open">open</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:180</li>
+									<li>Defined in clients/AzureFunctionClient.ts:186</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -741,7 +747,7 @@ const result = await client.getData(<span class="hljs-string">"123"</span>, <spa
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="clients.azurefunctionclient.html">AzureFunctionClient</a>.<a href="clients.azurefunctionclient.html#setreferences">setReferences</a></p>
 								<ul>
-									<li>Defined in clients/AzureFunctionClient.ts:140</li>
+									<li>Defined in clients/AzureFunctionClient.ts:146</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

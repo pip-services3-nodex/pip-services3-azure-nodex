@@ -14,6 +14,10 @@ import { AzureFunctionClient } from './AzureFunctionClient';
  *     - protocol:                    (optional) connection protocol
  *     - app_name:                    (optional) Azure Function application name
  *     - function_name:               (optional) Azure Function name
+ * - options:
+ *      - retries:               number of retries (default: 3)
+ *      - connect_timeout:       connection timeout in milliseconds (default: 10 sec)
+ *      - timeout:               invocation timeout in milliseconds (default: 10 sec)
  * - credentials:
  *     - auth_code:                   Azure Function auth code if use custom authorization provide empty string
  *  
@@ -76,12 +80,11 @@ export class CommandableAzureFunctionClient extends AzureFunctionClient {
         const timing = this.instrument(correlationId, this._name + '.' + cmd);
         try {
             const result = await this.call<T>(cmd, correlationId, params);
+            timing.endTiming();
             return result;
         } catch (err) {
             timing.endFailure(err);
             return err;
-        } finally {
-            timing.endTiming();
         }
     }
 }

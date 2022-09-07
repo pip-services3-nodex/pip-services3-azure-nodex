@@ -290,8 +290,18 @@ export abstract class AzureFunctionService implements IAzureFunctionService, IOp
      * 
      * @param action an action function that is called when middleware is invoked.
      */
-    protected registerInterceptor(action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void {
-        this._interceptors.push(action);
+    protected registerInterceptor(cmd: string, action: (context: any, next: (context: any) => Promise<any>) => Promise<any>): void {
+        let self = this;
+        let interceptorWrapper = async (req: Request, next: (context: any) => Promise<any>) => {
+            let currCmd = this.getCommand(req);
+            let match = (currCmd.match(cmd) || []).length > 0;
+            if (cmd != null && cmd != "" && !match)
+                return await next.call(self, req);
+            else 
+                return await action.call(self, req, next);
+        }
+
+        this._interceptors.push(interceptorWrapper);
     }
 
     /**

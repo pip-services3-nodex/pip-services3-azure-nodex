@@ -86,6 +86,7 @@ export class DummyAzureFunctionService extends AzureFunctionService {
     }
 
     protected register() {
+
         this.registerAction(
             'get_dummies',
             new ObjectSchema(true).withOptionalProperty('body', 
