@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 # Get component metadata and set necessary variables
 $component = Get-Content -Path "$PSScriptRoot/component.json" | ConvertFrom-Json
 $docsImage = "$($component.registry)/$($component.name):$($component.version)-$($component.build)-docs"
-$container = $component.name
+$container=$component.name
 
 # Remove documentation files
 if (Test-Path -Path "$PSScriptRoot/docs") {
