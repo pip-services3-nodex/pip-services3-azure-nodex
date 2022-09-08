@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AzureConnectionResolver | pip-services3-azure-nodex</title>
+	<title>AzureFunctionConnectionResolver | pip-services3-azure-nodex</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/connect.html">connect</a>
 				</li>
 				<li>
-					<a href="connect.azureconnectionresolver.html">AzureConnectionResolver</a>
+					<a href="connect.azurefunctionconnectionresolver.html">AzureFunctionConnectionResolver</a>
 				</li>
 			</ul>
-			<h1>Class AzureConnectionResolver</h1>
+			<h1>Class AzureFunctionConnectionResolver</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,7 @@
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
 						<p>Helper class to retrieve Azure connection and credential parameters,
-						validate them and compose a <a href="connect.azureconnectionparams.html">AzureConnectionParams</a> value.</p>
+						validate them and compose a [[AzureConnectionParams]] value.</p>
 					</div>
 					<h3 id="configuration-parameters">Configuration parameters</h3>
 					<ul>
@@ -119,7 +119,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AzureConnectionResolver</span>
+						<span class="target">AzureFunctionConnectionResolver</span>
 					</li>
 				</ul>
 			</section>
@@ -137,16 +137,16 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="connect.azureconnectionresolver.html#_connectionresolver" class="tsd-kind-icon">_connection<wbr>Resolver</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="connect.azureconnectionresolver.html#_credentialresolver" class="tsd-kind-icon">_credential<wbr>Resolver</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="connect.azurefunctionconnectionresolver.html#_connectionresolver" class="tsd-kind-icon">_connection<wbr>Resolver</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="connect.azurefunctionconnectionresolver.html#_credentialresolver" class="tsd-kind-icon">_credential<wbr>Resolver</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azureconnectionresolver.html#configure" class="tsd-kind-icon">configure</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azureconnectionresolver.html#resolve" class="tsd-kind-icon">resolve</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azureconnectionresolver.html#setreferences" class="tsd-kind-icon">set<wbr>References</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azurefunctionconnectionresolver.html#configure" class="tsd-kind-icon">configure</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azurefunctionconnectionresolver.html#resolve" class="tsd-kind-icon">resolve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="connect.azurefunctionconnectionresolver.html#setreferences" class="tsd-kind-icon">set<wbr>References</a></li>
 							</ul>
 						</section>
 					</div>
@@ -160,7 +160,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 					<div class="tsd-signature tsd-kind-icon">_connection<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConnectionResolver</span><span class="tsd-signature-symbol"> =&nbsp;new ConnectionResolver()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in connect/AzureConnectionResolver.ts:53</li>
+							<li>Defined in connect/AzureFunctionConnectionResolver.ts:53</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,7 +175,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 					<div class="tsd-signature tsd-kind-icon">_credential<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CredentialResolver</span><span class="tsd-signature-symbol"> =&nbsp;new CredentialResolver()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in connect/AzureConnectionResolver.ts:57</li>
+							<li>Defined in connect/AzureFunctionConnectionResolver.ts:57</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -197,7 +197,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:64</li>
+									<li>Defined in connect/AzureFunctionConnectionResolver.ts:64</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -222,13 +222,13 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 					<a name="resolve" class="tsd-anchor"></a>
 					<h3>resolve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span>correlationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="connect.azureconnectionparams.html" class="tsd-signature-type">AzureConnectionParams</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span>correlationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="connect.azurefunctionconnectionparams.html" class="tsd-signature-type">AzureFunctionConnectionParams</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:89</li>
+									<li>Defined in connect/AzureFunctionConnectionResolver.ts:89</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -251,7 +251,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="connect.azureconnectionparams.html" class="tsd-signature-type">AzureConnectionParams</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="connect.azurefunctionconnectionparams.html" class="tsd-signature-type">AzureFunctionConnectionParams</a><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>callback function that receives AzureConnectionParams value or error.</p>
 						</li>
 					</ul>
@@ -266,7 +266,7 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in connect/AzureConnectionResolver.ts:74</li>
+									<li>Defined in connect/AzureFunctionConnectionResolver.ts:74</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -315,27 +315,27 @@ const connectionParams = await connectionResolver.resolve(<span class="hljs-stri
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="connect.azureconnectionparams.html" class="tsd-kind-icon">Azure<wbr>Connection<wbr>Params</a>
+						<a href="connect.azurefunctionconnectionparams.html" class="tsd-kind-icon">Azure<wbr>Function<wbr>Connection<wbr>Params</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="connect.azureconnectionresolver.html" class="tsd-kind-icon">Azure<wbr>Connection<wbr>Resolver</a>
+						<a href="connect.azurefunctionconnectionresolver.html" class="tsd-kind-icon">Azure<wbr>Function<wbr>Connection<wbr>Resolver</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="connect.azureconnectionresolver.html#_connectionresolver" class="tsd-kind-icon">_connection<wbr>Resolver</a>
+								<a href="connect.azurefunctionconnectionresolver.html#_connectionresolver" class="tsd-kind-icon">_connection<wbr>Resolver</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="connect.azureconnectionresolver.html#_credentialresolver" class="tsd-kind-icon">_credential<wbr>Resolver</a>
+								<a href="connect.azurefunctionconnectionresolver.html#_credentialresolver" class="tsd-kind-icon">_credential<wbr>Resolver</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="connect.azureconnectionresolver.html#configure" class="tsd-kind-icon">configure</a>
+								<a href="connect.azurefunctionconnectionresolver.html#configure" class="tsd-kind-icon">configure</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="connect.azureconnectionresolver.html#resolve" class="tsd-kind-icon">resolve</a>
+								<a href="connect.azurefunctionconnectionresolver.html#resolve" class="tsd-kind-icon">resolve</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="connect.azureconnectionresolver.html#setreferences" class="tsd-kind-icon">set<wbr>References</a>
+								<a href="connect.azurefunctionconnectionresolver.html#setreferences" class="tsd-kind-icon">set<wbr>References</a>
 							</li>
 						</ul>
 					</li>

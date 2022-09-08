@@ -177,14 +177,6 @@ export class AzureFunctionConnectionParams extends ConfigParams {
                 correlationId, "WRONG_PROTOCOL", "Protocol is not supported by REST connection")
                 .withDetails("protocol", protocol);
         }
-
-        if (this.getAuthCode() == null) {
-            throw new ConfigException(
-                correlationId, 
-                "NO_ACCESS_KEY",
-                "No access_key is configured in Azure credential"
-            );
-        }
     }
 
     /**

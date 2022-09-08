@@ -160,9 +160,6 @@ class AzureFunctionConnectionParams extends pip_services3_commons_nodex_1.Config
             throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "WRONG_PROTOCOL", "Protocol is not supported by REST connection")
                 .withDetails("protocol", protocol);
         }
-        if (this.getAuthCode() == null) {
-            throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_ACCESS_KEY", "No access_key is configured in Azure credential");
-        }
     }
     /**
      * Retrieves AzureConnectionParams from configuration parameters.
