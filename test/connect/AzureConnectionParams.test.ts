@@ -1,13 +1,13 @@
 const assert = require('chai').assert;
 
 import { ConfigParams } from 'pip-services3-commons-nodex';
-import { AzureConnectionParams } from '../../src/connect/AzureConnectionParams';
-import { AzureConnectionResolver } from '../../src/connect/AzureConnectionResolver';
+import { AzureFunctionConnectionParams } from '../../src/connect/AzureFunctionConnectionParams';
+import { AzureFunctionConnectionResolver } from '../../src/connect/AzureFunctionConnectionResolver';
 
 suite('AzureConnectionParams', ()=> {
 
     test('Test Empty Connection', async () => {
-        let connection = new AzureConnectionParams();
+        let connection = new AzureFunctionConnectionParams();
         assert.isNull(connection.getFunctionUri());
         assert.isNull(connection.getAppName());
         assert.isNull(connection.getFunctionName());
@@ -26,7 +26,7 @@ suite('AzureConnectionParams', ()=> {
             'connection.function_name', 'myfunction',
             'credential.auth_code', '1234',
         );
-        let resolver = new AzureConnectionResolver();
+        let resolver = new AzureFunctionConnectionResolver();
         resolver.configure(config1);
         let connection =  await resolver.resolve('');
 
@@ -36,7 +36,7 @@ suite('AzureConnectionParams', ()=> {
         assert.equal('myfunction', connection.getFunctionName());
         assert.equal('1234', connection.getAuthCode());
 
-        resolver = new AzureConnectionResolver();
+        resolver = new AzureFunctionConnectionResolver();
         resolver.configure(config2);
         connection =  await resolver.resolve('');
 

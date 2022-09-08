@@ -9,8 +9,8 @@ import { CompositeLogger } from 'pip-services3-components-nodex';
 import { CompositeTracer } from 'pip-services3-components-nodex';
 import { CompositeCounters } from 'pip-services3-components-nodex';
 import { InstrumentTiming } from "pip-services3-rpc-nodex";
-import { AzureConnectionParams } from '../connect/AzureConnectionParams';
-import { AzureConnectionResolver } from '../connect/AzureConnectionResolver';
+import { AzureFunctionConnectionParams } from '../connect/AzureFunctionConnectionParams';
+import { AzureFunctionConnectionResolver } from '../connect/AzureFunctionConnectionResolver';
 /**
  * Abstract client that calls Azure Functions.
  *
@@ -75,7 +75,7 @@ export declare abstract class AzureFunctionClient implements IOpenable, IConfigu
     /**
      * The Azure Function connection parameters
      */
-    protected _connection: AzureConnectionParams;
+    protected _connection: AzureFunctionConnectionParams;
     protected _retries: number;
     /**
      * The default headers to be added to every request.
@@ -100,7 +100,7 @@ export declare abstract class AzureFunctionClient implements IOpenable, IConfigu
     /**
      * The connection resolver.
      */
-    protected _connectionResolver: AzureConnectionResolver;
+    protected _connectionResolver: AzureFunctionConnectionResolver;
     /**
      * The logger.
      */

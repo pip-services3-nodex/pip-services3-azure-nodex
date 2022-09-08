@@ -19,7 +19,7 @@ const pip_services3_components_nodex_1 = require("pip-services3-components-nodex
 const pip_services3_components_nodex_2 = require("pip-services3-components-nodex");
 const pip_services3_components_nodex_3 = require("pip-services3-components-nodex");
 const pip_services3_rpc_nodex_1 = require("pip-services3-rpc-nodex");
-const AzureConnectionResolver_1 = require("../connect/AzureConnectionResolver");
+const AzureFunctionConnectionResolver_1 = require("../connect/AzureFunctionConnectionResolver");
 /**
  * Abstract client that calls Azure Functions.
  *
@@ -98,7 +98,7 @@ class AzureFunctionClient {
         /**
          * The connection resolver.
          */
-        this._connectionResolver = new AzureConnectionResolver_1.AzureConnectionResolver();
+        this._connectionResolver = new AzureFunctionConnectionResolver_1.AzureFunctionConnectionResolver();
         /**
          * The logger.
          */

@@ -11,11 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert = require('chai').assert;
 const pip_services3_commons_nodex_1 = require("pip-services3-commons-nodex");
-const AzureConnectionParams_1 = require("../../src/connect/AzureConnectionParams");
-const AzureConnectionResolver_1 = require("../../src/connect/AzureConnectionResolver");
+const AzureFunctionConnectionParams_1 = require("../../src/connect/AzureFunctionConnectionParams");
+const AzureFunctionConnectionResolver_1 = require("../../src/connect/AzureFunctionConnectionResolver");
 suite('AzureConnectionParams', () => {
     test('Test Empty Connection', () => __awaiter(void 0, void 0, void 0, function* () {
-        let connection = new AzureConnectionParams_1.AzureConnectionParams();
+        let connection = new AzureFunctionConnectionParams_1.AzureFunctionConnectionParams();
         assert.isNull(connection.getFunctionUri());
         assert.isNull(connection.getAppName());
         assert.isNull(connection.getFunctionName());
@@ -25,7 +25,7 @@ suite('AzureConnectionParams', () => {
     test('Compose Config', () => __awaiter(void 0, void 0, void 0, function* () {
         const config1 = pip_services3_commons_nodex_1.ConfigParams.fromTuples('connection.uri', 'http://myapp.azurewebsites.net/api/myfunction', 'credential.auth_code', '1234');
         const config2 = pip_services3_commons_nodex_1.ConfigParams.fromTuples('connection.protocol', 'http', 'connection.app_name', 'myapp', 'connection.function_name', 'myfunction', 'credential.auth_code', '1234');
-        let resolver = new AzureConnectionResolver_1.AzureConnectionResolver();
+        let resolver = new AzureFunctionConnectionResolver_1.AzureFunctionConnectionResolver();
         resolver.configure(config1);
         let connection = yield resolver.resolve('');
         assert.equal('http://myapp.azurewebsites.net/api/myfunction', connection.getFunctionUri());
@@ -33,7 +33,7 @@ suite('AzureConnectionParams', () => {
         assert.equal('http', connection.getProtocol());
         assert.equal('myfunction', connection.getFunctionName());
         assert.equal('1234', connection.getAuthCode());
-        resolver = new AzureConnectionResolver_1.AzureConnectionResolver();
+        resolver = new AzureFunctionConnectionResolver_1.AzureFunctionConnectionResolver();
         resolver.configure(config2);
         connection = yield resolver.resolve('');
         assert.equal('http://myapp.azurewebsites.net/api/myfunction', connection.getFunctionUri());

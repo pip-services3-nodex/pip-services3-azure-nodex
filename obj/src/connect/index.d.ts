@@ -1,3 +1,3 @@
 /** @module connect */
-export { AzureConnectionParams } from './AzureConnectionParams';
-export { AzureConnectionResolver } from './AzureConnectionResolver';
+export { AzureFunctionConnectionParams } from './AzureFunctionConnectionParams';
+export { AzureFunctionConnectionResolver } from './AzureFunctionConnectionResolver';
