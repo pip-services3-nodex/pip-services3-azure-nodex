@@ -164,7 +164,7 @@ export class AzureFunctionConnectionParams extends ConfigParams {
         const appName = this.getAppName();
         const functionName = this.getFunctionName();
 
-        if (uri === null && (appName === null && functionName === null && protocol === null)) {
+        if (uri === null && (appName === null || functionName === null || protocol === null)) {
             throw new ConfigException(
                 correlationId,
                 "NO_CONNECTION_URI",

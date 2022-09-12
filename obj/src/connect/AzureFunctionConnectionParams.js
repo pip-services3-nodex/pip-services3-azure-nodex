@@ -153,7 +153,7 @@ class AzureFunctionConnectionParams extends pip_services3_commons_nodex_1.Config
         const protocol = this.getProtocol();
         const appName = this.getAppName();
         const functionName = this.getFunctionName();
-        if (uri === null && (appName === null && functionName === null && protocol === null)) {
+        if (uri === null && (appName === null || functionName === null || protocol === null)) {
             throw new pip_services3_commons_nodex_3.ConfigException(correlationId, "NO_CONNECTION_URI", "No uri, app_name and function_name is configured in Auzre function uri");
         }
         if (protocol != null && "http" != protocol && "https" != protocol) {

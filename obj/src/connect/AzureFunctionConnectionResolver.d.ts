@@ -69,7 +69,7 @@ export declare class AzureFunctionConnectionResolver implements IConfigurable, I
      *
      * @param correlationId             (optional) transaction id to trace execution through call chain.
      *
-     * @return {AzureFunctionConnectionParams} 	callback function that receives AzureConnectionParams value or error.
+     * @return {AzureFunctionConnectionParams} 	AzureConnectionParams value or error.
      *
      * @see [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/connect.idiscovery.html IDiscovery]] (in the Pip.Services components package)
      */
