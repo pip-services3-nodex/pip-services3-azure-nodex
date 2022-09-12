@@ -63,7 +63,7 @@ export abstract class CommandableAzureFunction extends AzureFunction {
      * @return Returns Parameters from context
      */
     protected getParametrs(context: any): Parameters {
-        return AzureFunctionContextHelper.getParametrs(context);
+        return AzureFunctionContextHelper.getParameters(context);
     }
 
     private registerCommandSet(commandSet: CommandSet) {

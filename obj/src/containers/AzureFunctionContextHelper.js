@@ -49,7 +49,7 @@ class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    static getParametrs(context) {
+    static getParameters(context) {
         let body = context;
         try {
             if (context.hasOwnProperty('body')) {

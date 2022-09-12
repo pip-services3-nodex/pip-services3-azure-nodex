@@ -48,7 +48,7 @@ export class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    public static getParametrs(context: any): Parameters {
+    public static getParameters(context: any): Parameters {
         let body: any = context;
         try {
             if (context.hasOwnProperty('body')) {

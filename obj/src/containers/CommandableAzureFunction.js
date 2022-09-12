@@ -67,7 +67,7 @@ class CommandableAzureFunction extends AzureFunction_1.AzureFunction {
      * @return Returns Parameters from context
      */
     getParametrs(context) {
-        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getParametrs(context);
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getParameters(context);
     }
     registerCommandSet(commandSet) {
         let commands = commandSet.getCommands();

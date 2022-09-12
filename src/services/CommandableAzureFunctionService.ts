@@ -70,7 +70,7 @@ export abstract class CommandableAzureFunctionService extends AzureFunctionServi
      * @return Returns Parameters from context
      */
     protected getParametrs(context: any): Parameters {
-        return AzureFunctionContextHelper.getParametrs(context);
+        return AzureFunctionContextHelper.getParameters(context);
     }
 
     /**

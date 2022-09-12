@@ -18,5 +18,5 @@ export declare class AzureFunctionContextHelper {
      * @param context the Azure Function context
      * @return returns body from context
      */
-    static getParametrs(context: any): Parameters;
+    static getParameters(context: any): Parameters;
 }

@@ -73,7 +73,7 @@ class CommandableAzureFunctionService extends AzureFunctionService_1.AzureFuncti
      * @return Returns Parameters from context
      */
     getParametrs(context) {
-        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getParametrs(context);
+        return AzureFunctionContextHelper_1.AzureFunctionContextHelper.getParameters(context);
     }
     /**
      * Registers all actions in Azure Function.
