@@ -229,7 +229,7 @@ class AzureFunctionClient {
     invoke(cmd, correlationId, args) {
         return __awaiter(this, void 0, void 0, function* () {
             if (cmd == null) {
-                throw new pip_services3_commons_nodex_4.UnknownException(null, 'NO_COMMAND', 'Missing Seneca pattern cmd');
+                throw new pip_services3_commons_nodex_4.UnknownException(null, 'NO_COMMAND', 'Cmd parameter is missing');
             }
             args = Object.assign({}, args);
             args.cmd = cmd;
