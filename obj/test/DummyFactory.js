@@ -17,6 +17,6 @@ class DummyFactory extends pip_services3_components_nodex_1.Factory {
 exports.DummyFactory = DummyFactory;
 DummyFactory.Descriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "factory", "default", "default", "1.0");
 DummyFactory.ControllerDescriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "controller", "default", "*", "1.0");
-DummyFactory.AzureFunctionServiceDescriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "service", "azure-function", "*", "1.0");
-DummyFactory.CmdAzureFunctionServiceDescriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "service", "commandable-azure-function", "*", "1.0");
+DummyFactory.AzureFunctionServiceDescriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "service", "azurefunc", "*", "1.0");
+DummyFactory.CmdAzureFunctionServiceDescriptor = new pip_services3_commons_nodex_1.Descriptor("pip-services-dummies", "service", "commandable-azurefunc", "*", "1.0");
 //# sourceMappingURL=DummyFactory.js.map

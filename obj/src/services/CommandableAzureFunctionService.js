@@ -91,14 +91,13 @@ class CommandableAzureFunctionService extends AzureFunctionService_1.AzureFuncti
                 args.remove("correlation_id");
                 let timing = this.instrument(correlationId, name);
                 try {
-                    return yield command.execute(correlationId, args);
+                    let res = yield command.execute(correlationId, args);
+                    timing.endTiming();
+                    return res;
                 }
                 catch (ex) {
                     timing.endFailure(ex);
                     return ex;
-                }
-                finally {
-                    timing.endTiming();
                 }
             }));
         }

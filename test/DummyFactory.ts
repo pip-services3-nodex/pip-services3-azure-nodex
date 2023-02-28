@@ -8,8 +8,8 @@ import { DummyCommandableAzureFunctionService } from './services/DummyCommandabl
 export class DummyFactory extends Factory {
 	public static Descriptor = new Descriptor("pip-services-dummies", "factory", "default", "default", "1.0");
 	public static ControllerDescriptor = new Descriptor("pip-services-dummies", "controller", "default", "*", "1.0");
-	public static AzureFunctionServiceDescriptor = new Descriptor("pip-services-dummies", "service", "azure-function", "*", "1.0");
-	public static CmdAzureFunctionServiceDescriptor = new Descriptor("pip-services-dummies", "service", "commandable-azure-function", "*", "1.0");
+	public static AzureFunctionServiceDescriptor = new Descriptor("pip-services-dummies", "service", "azurefunc", "*", "1.0");
+	public static CmdAzureFunctionServiceDescriptor = new Descriptor("pip-services-dummies", "service", "commandable-azurefunc", "*", "1.0");
 	public constructor() {
 		super();
 		this.registerAsType(DummyFactory.ControllerDescriptor, DummyController);

@@ -38,8 +38,8 @@ const AzureFunctionContextHelper_1 = require("./AzureFunctionContextHelper");
  *
  * - <code>\*:logger:\*:\*:1.0</code>            (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
  * - <code>\*:counters:\*:\*:1.0</code>          (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- * - <code>\*:service:azure-function:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
- * - <code>\*:service:commandable-azure-function:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:azurefunc:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:commandable-azurefunc:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
  *
  *
  * ### Example ###
@@ -187,8 +187,8 @@ class AzureFunction extends pip_services3_container_nodex_1.Container {
      */
     registerServices() {
         // Extract regular and commandable Azure Function services from references
-        let services = this._references.getOptional(new pip_services3_commons_nodex_4.Descriptor("*", "service", "azure-function", "*", "*"));
-        let cmdServices = this._references.getOptional(new pip_services3_commons_nodex_4.Descriptor("*", "service", "commandable-azure-function", "*", "*"));
+        let services = this._references.getOptional(new pip_services3_commons_nodex_4.Descriptor("*", "service", "azurefunc", "*", "*"));
+        let cmdServices = this._references.getOptional(new pip_services3_commons_nodex_4.Descriptor("*", "service", "commandable-azurefunc", "*", "*"));
         services.push(...cmdServices);
         // Register actions defined in those services
         for (let service of services) {

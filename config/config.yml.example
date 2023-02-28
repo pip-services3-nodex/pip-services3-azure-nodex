@@ -4,4 +4,4 @@
 
 - descriptor: "pip-services-dummies:controller:default:default:1.0"
 
-- descriptor: "pip-services-dummies:service:azure-function:default:1.0"
+- descriptor: "pip-services-dummies:service:azurefunc:default:1.0"

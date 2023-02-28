@@ -92,12 +92,12 @@ export abstract class CommandableAzureFunctionService extends AzureFunctionServi
 
                 let timing = this.instrument(correlationId, name);
                 try {
-                    return await command.execute(correlationId, args);
+                    let res = await command.execute(correlationId, args);
+                    timing.endTiming();
+                    return res;
                 } catch (ex) {
                     timing.endFailure(ex);
                     return ex;
-                } finally {
-                    timing.endTiming();
                 }
             });
         }

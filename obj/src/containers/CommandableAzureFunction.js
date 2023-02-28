@@ -26,8 +26,8 @@ const AzureFunctionContextHelper_1 = require("./AzureFunctionContextHelper");
  *
  * - <code>\*:logger:\*:\*:1.0</code>            (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
  * - <code>\*:counters:\*:\*:1.0</code>          (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- * - <code>\*:service:azure-function:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
- * - <code>\*:service:commandable-azure-function:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:azurefunc:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:commandable-azurefunc:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
  *
  *
  * ### Example ###
@@ -78,14 +78,13 @@ class CommandableAzureFunction extends AzureFunction_1.AzureFunction {
                 let args = this.getParametrs(context);
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
                 try {
-                    return yield command.execute(correlationId, args);
+                    let res = yield command.execute(correlationId, args);
+                    timing.endTiming();
+                    return res;
                 }
                 catch (err) {
                     timing.endFailure(err);
                     return err;
-                }
-                finally {
-                    timing.endTiming();
                 }
             }));
         }

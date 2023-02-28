@@ -17,7 +17,7 @@ suite('DummyAzureFunctionService', () => {
     let DUMMY2 = { id: null, key: "Key 2", content: "Content 2" };
     let _functionService;
     suiteSetup(() => __awaiter(void 0, void 0, void 0, function* () {
-        let config = pip_services3_commons_nodex_1.ConfigParams.fromTuples('logger.descriptor', 'pip-services:logger:console:default:1.0', 'controller.descriptor', 'pip-services-dummies:controller:default:default:1.0', 'service.descriptor', 'pip-services-dummies:service:azure-function:default:1.0');
+        let config = pip_services3_commons_nodex_1.ConfigParams.fromTuples('logger.descriptor', 'pip-services:logger:console:default:1.0', 'controller.descriptor', 'pip-services-dummies:controller:default:default:1.0', 'service.descriptor', 'pip-services-dummies:service:azurefunc:default:1.0');
         _functionService = new DummyAzureFunction_1.DummyAzureFunction();
         _functionService.configure(config);
         yield _functionService.open(null);

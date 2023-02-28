@@ -20,8 +20,8 @@ import {AzureFunctionContextHelper} from "./AzureFunctionContextHelper";
  * 
  * - <code>\*:logger:\*:\*:1.0</code>            (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
  * - <code>\*:counters:\*:\*:1.0</code>          (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- * - <code>\*:service:azure-function:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
- * - <code>\*:service:commandable-azure-function:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:azurefunc:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:commandable-azurefunc:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
  *
  * 
  * ### Example ###
@@ -77,12 +77,12 @@ export abstract class CommandableAzureFunction extends AzureFunction {
                 let timing = this.instrument(correlationId, this._info.name + '.' + command.getName());
 
                 try {
-                    return await command.execute(correlationId, args);
+                    let res = await command.execute(correlationId, args);
+                    timing.endTiming();
+                    return res;
                 } catch (err) {
                     timing.endFailure(err);
                     return err;
-                } finally {
-                    timing.endTiming();
                 }
             });
         }

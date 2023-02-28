@@ -32,8 +32,8 @@ import { IAzureFunctionService } from '../services/IAzureFunctionService';
  * 
  * - <code>\*:logger:\*:\*:1.0</code>            (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/log.ilogger.html ILogger]] components to pass log messages
  * - <code>\*:counters:\*:\*:1.0</code>          (optional) [[https://pip-services3-nodex.github.io/pip-services3-components-nodex/interfaces/count.icounters.html ICounters]] components to pass collected measurements
- * - <code>\*:service:azure-function:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
- * - <code>\*:service:commandable-azure-function:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:azurefunc:\*:1.0</code>       (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
+ * - <code>\*:service:commandable-azurefunc:\*:1.0</code> (optional) [[https://pip-services3-nodex.github.io/pip-services3-azure-nodex/interfaces/services.iazurefunctionservice.html IAzureFunctionService]] services to handle action requests
  * 
  *
  * ### Example ###
@@ -195,10 +195,10 @@ export abstract class AzureFunction extends Container {
     protected registerServices(): void {
         // Extract regular and commandable Azure Function services from references
         let services = this._references.getOptional<IAzureFunctionService>(
-            new Descriptor("*", "service", "azure-function", "*", "*")
+            new Descriptor("*", "service", "azurefunc", "*", "*")
         );
         let cmdServices = this._references.getOptional<IAzureFunctionService>(
-            new Descriptor("*", "service", "commandable-azure-function", "*", "*")
+            new Descriptor("*", "service", "commandable-azurefunc", "*", "*")
         );
         services.push(...cmdServices);
 

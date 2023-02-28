@@ -15,7 +15,7 @@ suite('DummyCommandableAzureFunctionService', () => {
         let config = ConfigParams.fromTuples(
             'logger.descriptor', 'pip-services:logger:console:default:1.0',
             'controller.descriptor', 'pip-services-dummies:controller:default:default:1.0',
-            'service.descriptor', 'pip-services-dummies:service:commandable-azure-function:default:1.0'
+            'service.descriptor', 'pip-services-dummies:service:commandable-azurefunc:default:1.0'
         );
 
         _functionService = new DummyCommandableAzureFunction();
